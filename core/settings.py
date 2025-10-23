@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'opportunities_db',
+        'NAME': 'Sources',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
