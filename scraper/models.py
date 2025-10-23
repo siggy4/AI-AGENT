@@ -13,6 +13,7 @@ class Opportunity(models.Model):
     deadline = models.DateField(blank=True, null=True)
     posted_date = models.DateField(blank=True, null=True)
     scraped_at = models.DateTimeField(auto_now_add=True)
+    # analyzed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

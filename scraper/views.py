@@ -1,17 +1,23 @@
-from django.shortcuts import models
+from django.shortcuts import render
+from rest_framework import viewsets
 
-class Opportunity(models.Model):
-    source_name = models.CharField(max_length=150, blank=True, null=True)
-    title = models.TextField()
-    url = models.URLField(unique=True)
-    category = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    posted_date = models.DateField(blank=True, null=True)
-    deadline = models.DateField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    scraped_at = models.DateTimeField(auto_now_add=True)
-    analyzed = models.BooleanField(default=False)
+from scraper.models import Opportunity
+from scraper.serializer import OpportunitySerializer
 
-    def __str__(self):
-        return self.title[:120]
 
+# should  contain your viewsets
+class OpportunityViewSet(viewsets.ModelViewSet):
+    queryset = Opportunity.objects.all().order_by('-id')
+    serializer_class = OpportunitySerializer
+
+def landing_page(request):
+    total = Opportunity.objects.count()
+    # analyzed = Opportunity.objects.filter(analyzed=True).count()
+    latest = Opportunity.objects.order_by('-scraped_at')[:10]
+
+    context = {
+        'total': total,
+        'analyzed': total,
+        'latest': latest,
+    }
+    return render(request, 'scraper/landing.html', context)
