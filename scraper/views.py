@@ -1,7 +1,9 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets
 
 from scraper.models import Opportunity
+from scraper.scraper import run_scraper
 from scraper.serializer import OpportunitySerializer
 
 
@@ -9,6 +11,7 @@ from scraper.serializer import OpportunitySerializer
 class OpportunityViewSet(viewsets.ModelViewSet):
     queryset = Opportunity.objects.all().order_by('-id')
     serializer_class = OpportunitySerializer
+
 
 def landing_page(request):
     total = Opportunity.objects.count()
@@ -21,3 +24,12 @@ def landing_page(request):
         'latest': latest,
     }
     return render(request, 'scraper/landing.html', context)
+
+
+def run_scraper_api(request):
+    def run_scraper_api(request):
+        if request.method == 'GET':
+            result = run_scraper()
+            return JsonResponse(result)  # ✅ must return a response object
+        else:
+            return JsonResponse({'error': 'Only GET allowed'}, status=405)
