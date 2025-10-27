@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from .models import Opportunity
-
+from models import Opportunity
 def run_scraper():
     url = "https://tenders.go.ke"  # replace later
     res = requests.get(url)
