@@ -2,3 +2,6 @@ Django~=4.1.7
 pip~=21.2.4
 djangorestframework~=3.14.0
 requests~=2.32.3
+dj-database-url
+psycopg2-binary
+bs4
