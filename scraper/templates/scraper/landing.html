@@ -3,28 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Opportunity Tracker | ABC Consulting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <style>
+    /* Base */
     body {
-      background-color: #f7f9fc;
+      background-color: #f8fafc;
       font-family: "Inter", "Poppins", sans-serif;
+      color: #1e293b;
     }
 
     /* Navbar */
     .navbar {
-      background-color: #001f3f;
+      background: linear-gradient(90deg, #001f3f, #004080);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .navbar-brand {
-      font-weight: 600;
+      font-weight: 700;
       color: #fff !important;
-      letter-spacing: 0.5px;
+      font-size: 1.4rem;
+      letter-spacing: 0.6px;
     }
 
     /* Hero Title */
     h1 {
+      font-weight: 700;
       color: #001f3f;
-      font-weight: 600;
+      margin-bottom: 2rem;
     }
 
     /* Summary Cards */
@@ -32,46 +41,59 @@
       border: none;
       border-radius: 1rem;
       background: linear-gradient(145deg, #ffffff, #f0f4ff);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease-in-out;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
     .summary-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
     }
 
     .summary-card h5 {
-      color: #001f3f;
+      color: #334155;
       font-weight: 500;
     }
 
     .summary-card h2 {
       color: #007bff;
       font-weight: 700;
+      font-size: 2rem;
     }
 
     /* Table */
+    .card {
+      border-radius: 1rem;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
     table {
-      background-color: #fff;
       border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
     }
 
     thead {
       background-color: #001f3f;
       color: #fff;
+      font-size: 1rem;
+      text-transform: uppercase;
+    }
+
+    tbody tr {
+      transition: background-color 0.2s ease-in-out;
     }
 
     tbody tr:hover {
-      background-color: #f0f4ff;
+      background-color: #e8f0ff;
       cursor: pointer;
     }
 
+    /* Footer */
     footer {
-      margin-top: 50px;
+      margin-top: 60px;
       text-align: center;
-      color: #6c757d;
+      color: #64748b;
       font-size: 0.9rem;
     }
   </style>
@@ -99,22 +121,22 @@
       <div class="col-md-4 mb-3">
         <div class="card summary-card p-4">
           <h5>Analyzed</h5>
-          <h2>{{ total }}</h2>
+          <h2>{{ analyzed }}</h2>
         </div>
       </div>
       <div class="col-md-4 mb-3">
         <div class="card summary-card p-4">
           <h5>Pending Analysis</h5>
-          <h2>{{ total }}</h2>
+          <h2>{{ pending }}</h2>
         </div>
       </div>
     </div>
 
     <!-- Table -->
     <div class="card border-0 p-4">
-      <h3 class="mb-3 text-center text-primary">Latest Opportunities</h3>
+      <h3 class="mb-4 text-center text-primary fw-bold">Latest Opportunities</h3>
       <div class="table-responsive">
-        <table class="table align-middle table-hover">
+        <table class="table align-middle table-hover mb-0">
           <thead>
             <tr>
               <th>Title</th>
@@ -135,7 +157,7 @@
             </tr>
             {% empty %}
             <tr>
-              <td colspan="5" class="text-center text-muted">No opportunities available.</td>
+              <td colspan="5" class="text-center text-muted py-3">No opportunities available.</td>
             </tr>
             {% endfor %}
           </tbody>
@@ -144,8 +166,10 @@
     </div>
 
     <footer class="mt-5">
-      &copy; {{ now|date:"Y" }} ABC — Empowering Innovation.
+      &copy; {{ now|date:"Y" }} <strong>ABC Consulting</strong> — Empowering Innovation.
     </footer>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

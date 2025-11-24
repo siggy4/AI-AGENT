@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aura Safira Consulting — Partnership Tracker</title>
+  <link rel="stylesheet" href="outreach.css" />
+  <meta name="color-scheme" content="light dark">
+</head>
+<body>
+  <!-- faint ASC background logo (user should place asc-logo-white.png in same folder) -->
+  <div id="bg-logo" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="header-left">
+      <img id="asc-logo-header" src="C:\Users\ryan\Downloads\asc pfp.jpg" alt="ASC logo" />
+      <div class="title-wrap">
+        <h1>Aura Safira Consulting</h1>
+        <div class="tagline">Partnership Outreach Tracker</div>
+      </div>
+    </div>
+
+    <nav class="main-nav" role="navigation" aria-label="Main navigation">
+      <button data-view="home" class="nav-btn active">Home</button>
+      <button data-view="dashboard" class="nav-btn">Dashboard</button>
+      <button data-view="form" class="nav-btn">New Partnership</button>
+      <button data-view="about" class="nav-btn">About</button>
+      <button id="logout-btn" class="nav-btn hidden">Logout</button>
+    </nav>
+  </header>
+
+  <main class="container" role="main">
+    <!-- LOGIN VIEW -->
+    <section id="login-view" class="view">
+      <div class="login-card" role="region" aria-labelledby="login-heading">
+        <img id="asc-logo" src="C:\Users\ryan\Downloads\asc pfp.jpg" alt="ASC logo" class="login-logo"/>
+        <h2 id="login-heading">Welcome — Sign in</h2>
+        <p class="muted">Enter credentials to access the outreach dashboard</p>
+
+        <form id="login-form" autocomplete="off" novalidate>
+          <label class="form-group">
+            <span>Username</span>
+            <input id="username" type="text" placeholder="Partnership" required autocomplete="username" />
+          </label>
+
+          <label class="form-group">
+            <span>Password</span>
+            <div class="pw-wrapper">
+              <input id="password" type="password" placeholder="asc123" required autocomplete="current-password" />
+              <button type="button" id="toggle-pw" aria-label="Toggle password">👁️</button>
+            </div>
+          </label>
+
+          <div class="login-actions">
+            <button type="submit" class="btn primary">Sign in</button>
+            <a href="#" id="forgot-link" class="muted">Forgot password?</a>
+          </div>
+
+          <p id="login-error" class="error hidden" role="alert">Invalid username or password.</p>
+        </form>
+
+        <p class="hint">Username: <strong>Partnership</strong> — Password: <strong>asc123</strong></p>
+      </div>
+    </section>
+
+    <!-- HOME VIEW -->
+    <section id="home-view" class="view hidden">
+      <div class="welcome-panel">
+        <h2>Welcome to Aura Safira Outreach Tracker</h2>
+        <p>
+          This tracker helps Aura Safira Consulting record and monitor partnership outreach across selected countries.
+          Use the Dashboard to mark outreach method (Email / Phone / Both), add notes, set contact dates, and view automatic stats.
+        </p>
+        <div class="quick-actions">
+          <button class="btn" id="go-dashboard">Go to Dashboard</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section id="dashboard-view" class="view hidden dashboard">
+      <div class="stats-panel" id="stats-panel" aria-live="polite">
+        <div class="stats-item">
+          <div class="label">Total Companies</div>
+          <div class="value" id="stat-total">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="label">Contacted</div>
+          <div class="value" id="stat-contacted">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="label">Not Contacted</div>
+          <div class="value" id="stat-notcontacted">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="label">Email</div>
+          <div class="value" id="stat-email">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="label">Phone</div>
+          <div class="value" id="stat-phone">0</div>
+        </div>
+        <div class="stats-item">
+          <div class="label">Both</div>
+          <div class="value" id="stat-both">0</div>
+        </div>
+        <div class="stats-item progress">
+          <div class="label">Completion</div>
+          <div class="value"><span id="stat-percent">0%</span></div>
+        </div>
+      </div>
+
+      <div class="panel controls">
+        <div class="left">
+          <label>Show Country:
+            <select id="country-select" class="country-select" aria-label="Select country to display">
+              <option value="all">All Countries</option>
+              <option value="canada">Canada</option>
+              <option value="sweden">Sweden</option>
+              <option value="norway">Norway</option>
+              <option value="denmark">Denmark</option>
+              <option value="estonia">Estonia</option>
+              <option value="finland">Finland</option>
+              <option value="iceland">Iceland</option>
+            </select>
+          </label>
+          <button id="reset-display" class="btn">Reset Display</button>
+        </div>
+        <div class="right">
+          <span class="muted">Logged in as <strong>Partnership</strong></span>
+        </div>
+      </div>
+
+      <div id="countries-container" class="countries-container" aria-live="polite">
+        <!-- Filled dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- NEW PARTNERSHIP FORM VIEW -->
+    <section id="form-view" class="view hidden">
+      <div class="form-card">
+        <h2>NEW PARTNERSHIP ENTRY</h2>
+        <form id="new-entry-form" autocomplete="off">
+          <div class="form-grid">
+            <label>
+              <span>Country</span>
+              <select id="form-country" required>
+                <option value="">-- Select or type new --</option>
+                <option value="canada">Canada</option>
+                <option value="sweden">Sweden</option>
+                <option value="norway">Norway</option>
+                <option value="denmark">Denmark</option>
+                <option value="estonia">Estonia</option>
+                <option value="finland">Finland</option>
+                <option value="iceland">Iceland</option>
+                <option value="__new">Type new country...</option>
+              </select>
+              <input id="form-country-new" class="hidden" placeholder="Type new country name" />
+            </label>
+
+            <label>
+              <span>Company Name</span>
+              <input id="form-company" type="text" placeholder="Company name" required />
+            </label>
+
+            <label>
+              <span>Email</span>
+              <input id="form-email" type="email" placeholder="email@company.com" />
+            </label>
+
+            <label>
+              <span>Phone</span>
+              <input id="form-phone" type="tel" placeholder="+1 000 000 000" />
+            </label>
+
+            <label>
+              <span>Reached?</span>
+              <select id="form-reached" required>
+                <option value="Not Contacted">Not Contacted</option>
+                <option value="Reached">Reached</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Method</span>
+              <select id="form-method" required>
+                <option value="Not Contacted">Not Contacted</option>
+                <option value="Email">Email</option>
+                <option value="Phone">Phone</option>
+                <option value="Both">Both</option>
+              </select>
+            </label>
+
+            <label class="date-group">
+              <span>Date (optional)</span>
+              <div class="date-selects">
+                <select id="form-day"><option value="">Day</option></select>
+                <select id="form-month"><option value="">Month</option></select>
+                <select id="form-year"><option value="">Year</option></select>
+              </div>
+            </label>
+
+            <label class="full">
+              <span>Notes</span>
+              <textarea id="form-notes" placeholder="Write notes..."></textarea>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn cancel" id="form-cancel">Cancel</button>
+            <button type="reset" class="btn" id="form-reset">Reset</button>
+            <button type="submit" class="btn primary" id="form-save">Save</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ABOUT VIEW -->
+    <section id="about-view" class="view hidden">
+      <h2>About the ASC Outreach Tracker</h2>
+      <p>
+        The Aura Safira Consulting Outreach Tracker centralizes contact data by country and company so teams can log outreach attempts (email / phone / both),
+        select contact dates, leave notes and instantly view statistics. It helps track progress and shows where follow-up is needed.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-left">
+      <img id="asc-logo-footer" src="C:\Users\ryan\Downloads\asc pfp.jpg" alt="ASC logo" />
+    </div>
+
+    <div class="footer center">
+      <p>All Rights Reserved — Aura Safira Consulting 2025 ©</p>
+    </div>
+
+    <div class="footer-right">
+      <a href="https://aurasafira.co.ke" target="_blank" rel="noopener">aurasafira.co.ke</a>
+    </div>
+  </footer>
+
+  <script src="outreach.js"></script>
+</body>
+</html>
