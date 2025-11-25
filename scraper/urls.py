@@ -18,6 +18,6 @@ urlpatterns = [
     path('new/', new_partnership_page, name='new_partnership'),
     path('about/', about_page, name='about'),
 
-    path('login/', auth_views.LoginView.as_view(template_name='home.html'), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='scraper/home.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
 ]
