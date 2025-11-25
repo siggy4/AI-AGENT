@@ -1,0 +1,12 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="120" cy="120" r="110" fill="#FDE8E8"/> <!-- light maroon -->
+
+  <!-- Geometric hexagon -->
+  <polygon points="120,40 180,80 180,160 120,200 60,160 60,80"
+           fill="none" stroke="#8B0000" stroke-width="10"/> <!-- dark maroon -->
+  <!-- ASC Text -->
+  <text x="120" y="128" font-family="Arial, sans-serif"
+        font-size="48" font-weight="700"
+        fill="#B22222" text-anchor="middle">ASC</text> <!-- firebrick text -->
+</svg>

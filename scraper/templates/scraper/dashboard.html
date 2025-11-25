@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500 text-sm">Total Companies</p>
+        <p class="text-2xl font-bold">{{ total_companies }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500 text-sm">Contacted</p>
+        <p class="text-2xl font-bold">{{ contacted }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500 text-sm">Not Contacted</p>
+        <p class="text-2xl font-bold">{{ not_contacted }}</p>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow">
+        <p class="text-gray-500 text-sm">Completion</p>
+        <p class="text-2xl font-bold">{{ percent }}%</p>
+    </div>
+
+</div>
+
+{% endblock %}

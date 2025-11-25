@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}New Partnership{% endblock %}
+{% block content %}
+
+<div class="bg-white p-6 rounded shadow max-w-3xl mx-auto">
+    <h2 class="text-xl font-semibold mb-4">New Partnership Entry</h2>
+
+    <form method="POST" action="{% url 'partnership_create' %}" class="grid md:grid-cols-2 gap-4">
+        {% csrf_token %}
+
+        <div>
+            <label class="block text-sm mb-1">Country</label>
+            <select name="country" class="w-full border rounded px-3 py-2">
+                {% for c in countries %}
+                    <option>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Company</label>
+            <input name="company" class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Email</label>
+            <input name="email" type="email" class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Phone</label>
+            <input name="phone" type="tel" class="w-full border rounded px-3 py-2">
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Reached?</label>
+            <select name="reached" class="w-full border rounded px-3 py-2">
+                <option>Not Contacted</option>
+                <option>Reached</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="block text-sm mb-1">Method</label>
+            <select name="method" class="w-full border rounded px-3 py-2">
+                <option>Not Contacted</option>
+                <option>Email</option>
+                <option>Phone</option>
+                <option>Both</option>
+            </select>
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="block text-sm mb-1">Notes</label>
+            <textarea name="notes" class="w-full border rounded px-3 py-2 h-24"></textarea>
+        </div>
+
+        <div class="md:col-span-2 flex justify-end gap-2">
+            <button type="reset" class="px-4 py-2 rounded bg-gray-200">Reset</button>
+            <button class="px-4 py-2 rounded bg-blue-600 text-white">Save</button>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}
