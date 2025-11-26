@@ -5,3 +5,4 @@ requests~=2.32.3
 dj-database-url
 psycopg2-binary
 bs4
+pycountry

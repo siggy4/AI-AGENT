@@ -15,5 +15,22 @@ class Opportunity(models.Model):
     scraped_at = models.DateTimeField(auto_now_add=True)
     analyzed = models.BooleanField(default=False)
 
+
+class Partnership(models.Model):
+    country = models.CharField(max_length=100)
+    company = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=50)
+    reached = models.CharField(max_length=50)
+    method = models.CharField(max_length=50)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.company} - {self.country}"
+
+    def __str__(self):
+        return f"{self.company} - {self.country}"
+
     def __str__(self):
         return self.title

@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "scraper/base.html" %}
 {% block title %}New Partnership{% endblock %}
 {% block content %}
 
 <div class="bg-white p-6 rounded shadow max-w-3xl mx-auto">
     <h2 class="text-xl font-semibold mb-4">New Partnership Entry</h2>
 
-    <form method="POST" action="{% url 'partnership_create' %}" class="grid md:grid-cols-2 gap-4">
+    <form method="POST" action="{% url 'new_partnership' %}" class="grid md:grid-cols-2 gap-4">
         {% csrf_token %}
 
         <div>

@@ -1,29 +1,41 @@
-{% extends "base.html" %}
+{% extends "scraper/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 
-<h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
+<!-- Header -->
+<div class="mb-6">
+    <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
+    <p class="text-gray-500 text-sm mt-1">Overview of partnership engagement</p>
+</div>
 
+<!-- Cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-    <div class="bg-white p-4 rounded shadow">
+    <!-- Total -->
+    <a href="{% url 'partnerships' %}?filter=all"
+       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
         <p class="text-gray-500 text-sm">Total Companies</p>
-        <p class="text-2xl font-bold">{{ total_companies }}</p>
-    </div>
+        <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ total_partnerships }}</p>
+    </a>
 
-    <div class="bg-white p-4 rounded shadow">
+    <!-- Contacted -->
+    <a href="{% url 'partnerships' %}?filter=contacted"
+       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
         <p class="text-gray-500 text-sm">Contacted</p>
-        <p class="text-2xl font-bold">{{ contacted }}</p>
-    </div>
+        <p class="text-3xl font-extrabold text-blue-600 mt-1">{{ total_partnerships_contacted }}</p>
+    </a>
 
-    <div class="bg-white p-4 rounded shadow">
+    <!-- Not Contacted -->
+    <a href="{% url 'partnerships' %}?filter=not_contacted"
+       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
         <p class="text-gray-500 text-sm">Not Contacted</p>
-        <p class="text-2xl font-bold">{{ not_contacted }}</p>
-    </div>
+        <p class="text-3xl font-extrabold text-red-600 mt-1">{{ not_contacted }}</p>
+    </a>
 
-    <div class="bg-white p-4 rounded shadow">
+    <!-- Completion -->
+    <div class="p-5  border border-gray-200 rounded-xl shadow-sm">
         <p class="text-gray-500 text-sm">Completion</p>
-        <p class="text-2xl font-bold">{{ percent }}%</p>
+        <p class="text-3xl font-extrabold text-green-600 mt-1">{{ partnership_completion_rate }}%</p>
     </div>
 
 </div>

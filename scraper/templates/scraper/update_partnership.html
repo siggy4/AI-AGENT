@@ -1,0 +1,64 @@
+{% extends "scraper/base.html" %}
+{% block title %}Update {{ p.company }}{% endblock %}
+{% block content %}
+
+    <div class="max-w-2xl mx-auto">
+        <!-- Header Card -->
+        <div class="bg-gray-90 p-4 rounded-sm mb-6 border border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800">Update Partnership</h2>
+            <p class="text-gray-600 text-sm mt-1">
+                Editing details for <span class="font-semibold text-gray-800">{{ p.company }}</span>
+            </p>
+        </div>
+
+
+        <!-- Beautiful Form Card -->
+        <form method="POST"
+              class="bg-white p-6 rounded-xl shadow border border-gray-100 space-y-6 animate-fadeIn">
+            {% csrf_token %}
+
+            <!-- Reached -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Reached</label>
+                <select name="reached"
+                        class="w-full border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <option {% if p.reached == 'Not Contacted' %}selected{% endif %}>Not Contacted</option>
+                    <option {% if p.reached == 'Reached' %}selected{% endif %}>Reached</option>
+                </select>
+            </div>
+
+            <!-- Method -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Method</label>
+                <select name="method"
+                        class="w-full border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                    <option {% if p.method == 'Not Contacted' %}selected{% endif %}>Not Contacted</option>
+                    <option {% if p.method == 'Email' %}selected{% endif %}>Email</option>
+                    <option {% if p.method == 'Phone' %}selected{% endif %}>Phone</option>
+                    <option {% if p.method == 'Both' %}selected{% endif %}>Both</option>
+                </select>
+            </div>
+
+            <!-- Notes -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea name="notes"
+                          class="w-full border-gray-300 rounded-lg px-3 py-2 h-28 focus:ring-blue-500 focus:border-blue-500 transition">{{ p.notes }}</textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-between pt-4">
+                <a href="javascript:history.back()"
+                   class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                    Cancel
+                </a>
+
+                <button
+                        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow transition transform hover:scale-[1.02]">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
