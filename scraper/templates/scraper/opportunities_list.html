@@ -1,0 +1,54 @@
+{% extends "scraper/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<!-- Page Header -->
+<div class="mb-6">
+    <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
+    <p class="text-gray-500 text-sm mt-1">Showing {{ opportunities|length }} Opportunities</p>
+</div>
+<div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-100">
+    <table class="w-full text-sm">
+        <thead class="bg-gray-50">
+            <tr class="text-left text-gray-700 border-b">
+                <th class="p-3 font-semibold">Source</th>
+                <th class="p-3 font-semibold">Title</th>
+                <th class="p-3 font-semibold">Category</th>
+                <th class="p-3 font-semibold">Country</th>
+                <th class="p-3 font-semibold">Deadline</th>
+                <th class="p-3 font-semibold text-center">Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for o in opportunities %}
+            <tr class="border-b hover:bg-gray-50 transition">
+                <td class="p-3 font-medium text-gray-800">{{ o.source_name }}</td>
+                <td class="p-3">
+                    <a href="{{ o.url }}" target="_blank" class="text-blue-600 hover:underline">
+                        {{ o.title|truncatechars:50 }}
+                    </a>
+                </td>
+                <td class="p-3">{{ o.category }}</td>
+                <td class="p-3">{{ o.country }}</td>
+                <td class="p-3">
+                    {% if o.deadline %}
+                        {{ o.deadline }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+
+                <!-- View Button -->
+                <td class="p-3 text-center">
+                    <a href="{{ o.url }}" target="_blank"
+                       class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-xs font-semibold shadow-sm transition-all">
+                        View
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</div>
+
+{% endblock %}

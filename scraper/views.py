@@ -29,8 +29,10 @@ def dashboard_page(request):
         'total_partnerships': total_partnerships,
         'total_partnerships_contacted': total_partnerships_contacted,
         'not_contacted': total_partnerships - total_partnerships_contacted,
-        'partnership_completion_rate': (total_partnerships_contacted / total_partnerships * 100).__round__(0) if total_partnerships_contacted > 0 else 0,
+        'partnership_completion_rate': (total_partnerships_contacted / total_partnerships * 100).__round__(
+            0) if total_partnerships_contacted > 0 else 0,
     })
+
 
 # OPPORTUNITIES PAGE
 @login_required
@@ -43,6 +45,18 @@ def opportunities_page(request):
         'analyzed': analyzed,
         'latest': latest,
     })
+
+
+def opportunities_list(request):
+    flt = request.GET.get("filter")
+    opportunities = Opportunity.objects.all().order_by('-id')
+    if flt == "analyzed":
+        opportunities = opportunities.filter(analyzed=True)
+
+    return render(request, 'scraper/opportunities_list.html', {
+        'opportunities': opportunities,
+    })
+
 
 # RUN SCRAPER API
 def run_scraper_api(request):
