@@ -32,6 +32,17 @@ def dashboard_page(request):
         'partnership_completion_rate': (total_partnerships_contacted / total_partnerships * 100).__round__(0) if total_partnerships_contacted > 0 else 0,
     })
 
+# OPPORTUNITIES PAGE
+@login_required
+def opportunities_page(request):
+    total = Opportunity.objects.count()
+    analyzed = Opportunity.objects.filter(analyzed=True).count()
+    latest = Opportunity.objects.order_by('-scraped_at')[:10]
+    return render(request, 'scraper/opportunities.html', {
+        'total': total,
+        'analyzed': analyzed,
+        'latest': latest,
+    })
 
 # RUN SCRAPER API
 def run_scraper_api(request):
