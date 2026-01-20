@@ -23,4 +23,4 @@ def run_scraper():
             )
             scraped += 1
 
-    return {"message": f"{scraped} new opportunities scraped."}
+    return {"message": f"{soup} new opportunities scraped."}

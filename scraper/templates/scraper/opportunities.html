@@ -15,14 +15,14 @@
     <a href="{% url 'opportunities' %}?filter=all"
        class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
         <p class="text-gray-500 text-sm">Total</p>
-        <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ total_partnerships }}</p>
+        <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ total_opportunities }}</p>
     </a>
 
     <!-- Contacted -->
     <a href="{% url 'opportunities' %}?filter=analyzed"
        class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
         <p class="text-gray-500 text-sm">Analyzed</p>
-        <p class="text-3xl font-extrabold text-blue-600 mt-1">{{ total_partnerships_contacted }}</p>
+        <p class="text-3xl font-extrabold text-blue-600 mt-1">{{ total_analyzed }}</p>
     </a>
 
 </div>

@@ -41,8 +41,8 @@ def opportunities_page(request):
     analyzed = Opportunity.objects.filter(analyzed=True).count()
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
     return render(request, 'scraper/opportunities.html', {
-        'total': total,
-        'analyzed': analyzed,
+        'total_opportunities': total,
+        'total_analyzed': analyzed,
         'latest': latest,
     })
 

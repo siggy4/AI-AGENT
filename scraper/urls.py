@@ -23,7 +23,8 @@ urlpatterns = [
 
     # opportunity detail view
     path('opportunities/', opportunities_page, name='opportunities_page'),
-    path('list/', opportunities_list, name='opportunities'),
+    path('opportunity_list/', opportunities_list, name='opportunities'),
+    path('scap_opportunities/', run_scraper_api, name='scrap_opportunities'),
 
     path('about/', about_page, name='about'),
     path('login/', auth_views.LoginView.as_view(template_name='scraper/home.html'), name='login'),
