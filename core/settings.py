@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+import os
+import os
+from dotenv import load_dotenv
+
+# This tells Python to find your text file and read the secrets inside
+load_dotenv("scratch.env")
+
+# This creates a variable that Django can "see" project-wide
+
+# Tell dotenv exactly which file to look for
+load_dotenv(dotenv_path= "C:\Users\YWCA\AppData\Roaming\JetBrains\PyCharm2025.3\scratches\scratch.env")
+
+# Now load the key into a variable Django can use
+FIRECRAWL_API_KEY = os.getenv("fc-0d3f0027ab614353a6256aefc731844a")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +39,7 @@ SECRET_KEY = 'django-insecure-0*eb4i^9i75k6qm8mrwk07#yz42rvy8bra9@36vmwf7-57y%m(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.104', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -76,12 +90,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sources',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
