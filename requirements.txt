@@ -6,3 +6,6 @@ dj-database-url
 psycopg2-binary
 bs4
 pycountry
+django-environ
+firecrawl-py
+pydantic

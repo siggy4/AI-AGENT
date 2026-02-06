@@ -1,40 +1,36 @@
 import os
-from firecrawl import FirecrawlApp
-from pydantic import BaseModel
 from typing import List
-from .models import Opportunity
+from pydantic import BaseModel
 from firecrawl import Firecrawl
+from django.conf import settings
+from .models import Opportunity
 
-firecrawl = Firecrawl(api_key="fc-0d3f0027ab614353a6256aefc731844a")
+
+# Firecrawl client (env-based)
+firecrawl = Firecrawl(api_key=settings.FIRECRAWL_API_KEY)
 
 
-# 1. Define the structure you want Firecrawl to find
+# ---------- Pydantic schemas (JSON only) ----------
+
 class TenderSchema(BaseModel):
-    id = models.AutoField(primary_key=True)
-    source_name = models.CharField(max_length=100)
-    title = models.TextField()
-    url = models.URLField(unique=True)
-    category = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
-    active = models.BooleanField(default=True)
-    deadline = models.DateField(blank=True, null=True)
-    posted_date = models.DateField(blank=True, null=True)
-    scraped_at = models.DateTimeField(auto_now_add=True)
-    analyzed = models.BooleanField(default=False)
+    title: str
+    url: str
+    category: str | None = None
+    country: str | None = None
+    deadline: str | None = None
+    posted_date: str | None = None
 
 
 class TenderList(BaseModel):
     tenders: List[TenderSchema]
 
 
+# ---------- Scraper logic ----------
+
 def run_firecrawl_scraper():
-    doc = firecrawl.scrape("https://tenders.go.ke/tenders", formats=["markdown", "html"])
-    print(doc)
     target_url = "https://tenders.go.ke/tenders"
 
-    # 2. Tell Firecrawl to scrape and extract based on your schema
-    # This replaces all the BeautifulSoup 'find' and 'select' logic
-    result = app.scrape_url(
+    result = firecrawl.scrape_url(
         url=target_url,
         params={
             "formats": ["json"],
@@ -46,17 +42,21 @@ def run_firecrawl_scraper():
 
     scraped_count = 0
 
-    # 3. Save to your Django Database
-    if "json" in result:
-        for item in result["json"]["tenders"]:
-            # Standard Django duplicate check
-            if not Opportunity.objects.filter(url=item['url']).exists():
-                Opportunity.objects.create(
-                    source_name="PPIP Kenya",
-                    title=item['title'],
-                    url=item['url'],
-                    category=item['category']
-                )
-                scraped_count += 1
+    if "json" not in result:
+        return {"status": "failed", "reason": "No JSON returned"}
 
-    return {"status": "success", "new_items": scraped_count}
+    for item in result["json"]["tenders"]:
+        if not Opportunity.objects.filter(url=item["url"]).exists():
+            Opportunity.objects.create(
+                source_name="PPIP Kenya",
+                title=item["title"],
+                url=item["url"],
+                category=item.get("category"),
+                country=item.get("country"),
+            )
+            scraped_count += 1
+
+    return {
+        "status": "success",
+        "new_items": scraped_count
+    }
