@@ -40,10 +40,18 @@ def opportunities_page(request):
     total = Opportunity.objects.count()
     analyzed = Opportunity.objects.filter(analyzed=True).count()
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
+<<<<<<< HEAD
+=======
+    opportunities = Opportunity.objects.all().order_by('-id')
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
         'latest': latest,
+<<<<<<< HEAD
+=======
+        'opportunities': opportunities,
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
     })
 
 
@@ -117,9 +125,19 @@ def partnerships_list(request):
         partnerships = Partnership.objects.all().order_by("-id")
         title = "All Companies"
 
+<<<<<<< HEAD
     return render(request, "scraper/partnerships_list.html", {
         "partnerships": partnerships,
         "title": title,
+=======
+    # pass countries from a lib to template for rendering
+    countries = [(country.name) for country in pycountry.countries]
+    
+    return render(request, "scraper/partnerships_list.html", {
+        "partnerships": partnerships,
+        "title": title,
+        "countries": countries,
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
     })
 
 
