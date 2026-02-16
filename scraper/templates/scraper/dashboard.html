@@ -3,6 +3,7 @@
 {% block content %}
 
 <!-- Header -->
+<<<<<<< HEAD
 <div class="mb-6">
     <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
     <p class="text-gray-500 text-sm mt-1">Overview of partnership engagement</p>
@@ -10,6 +11,114 @@
 
 <!-- Cards -->
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+=======
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
+        <p class="text-gray-500 text-sm mt-1">Overview of partnership engagement</p>
+    </div>
+    
+    <!-- Range Button -->
+    <div class="relative group">
+        <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span id="range-text">Date Range</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+            <!-- Yearly Option -->
+            <div class="relative group/yearly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg flex justify-between items-center" onclick="toggleSubmenu('yearly')">
+                    <span>Yearly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="yearly-submenu" class="absolute right-full top-0 mr-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/yearly:opacity-100 group-hover/yearly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2024)">2024</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2023)">2023</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2022)">2022</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2021)">2021</a>
+                </div>
+            </div>
+
+            <!-- Quarterly Option -->
+            <div class="relative group/quarterly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex justify-between items-center" onclick="toggleSubmenu('quarterly')">
+                    <span>Quarterly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="quarterly-submenu" class="absolute right-full top-0 mr-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/quarterly:opacity-100 group-hover/quarterly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q1', 'Jan - Mar')">Q1 (Jan - Mar)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q2', 'Apr - Jun')">Q2 (Apr - Jun)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q3', 'Jul - Sep')">Q3 (Jul - Sep)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q4', 'Oct - Dec')">Q4 (Oct - Dec)</a>
+                </div>
+            </div>
+
+            <!-- Monthly Option -->
+            <div class="relative group/monthly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex justify-between items-center" onclick="toggleSubmenu('monthly')">
+                    <span>Monthly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="monthly-submenu" class="absolute right-full top-0 mr-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/monthly:opacity-100 group-hover/monthly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('January')">January</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('February')">February</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('March')">March</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('April')">April</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('May')">May</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('June')">June</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('July')">July</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('August')">August</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('September')">September</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('October')">October</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('November')">November</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('December')">December</a>
+                </div>
+            </div>
+
+            <!-- Custom Date Option -->
+            <div class="relative group/date">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg flex justify-between items-center" onclick="toggleSubmenu('date')">
+                    <span>Custom Date</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="date-submenu" class="absolute right-full top-0 mr-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/date:opacity-100 group-hover/date:visible transition-all duration-200 p-4">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="date" id="start-date" class="w-full px-2 py-1 text-sm border border-gray-300 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">End Date</label>
+                            <input type="date" id="end-date" class="w-full px-2 py-1 text-sm border border-gray-300 rounded">
+                        </div>
+                        <button onclick="applyDateRange()" class="w-full bg-blue-600 text-white text-sm py-1 rounded hover:bg-blue-700">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cards -->
+<div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
 
     <!-- Total -->
     <a href="{% url 'partnerships' %}?filter=all"
@@ -32,6 +141,23 @@
         <p class="text-3xl font-extrabold text-red-600 mt-1">{{ not_contacted }}</p>
     </a>
 
+<<<<<<< HEAD
+=======
+    <!-- Positive Feedback -->
+    <a href="{% url 'partnerships' %}?filter=positive"
+       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
+        <p class="text-gray-500 text-sm">Positive Feedback</p>
+        <p class="text-3xl font-extrabold text-green-600 mt-1">{{ positive_feedback }}</p>
+    </a>
+
+    <!-- Negative Feedback -->
+    <a href="{% url 'partnerships' %}?filter=negative"
+       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
+        <p class="text-gray-500 text-sm">Negative Feedback</p>
+        <p class="text-3xl font-extrabold text-orange-600 mt-1">{{ negative_feedback }}</p>
+    </a>
+
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
     <!-- Completion -->
     <div class="p-5  border border-gray-200 rounded-xl shadow-sm">
         <p class="text-gray-500 text-sm">Completion</p>
@@ -40,4 +166,80 @@
 
 </div>
 
+<<<<<<< HEAD
+=======
+<!-- Action Button -->
+<div class="mt-8 text-center">
+    <a href="{% url 'partnerships' %}" 
+       class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+        </svg>
+        View Partnership Lists
+    </a>
+</div>
+
+<script>
+function setRange(range) {
+    const rangeText = document.getElementById('range-text');
+    switch(range) {
+        case 'yearly':
+            rangeText.textContent = 'Yearly';
+            break;
+        case 'quarterly':
+            rangeText.textContent = 'Quarterly';
+            break;
+        case 'monthly':
+            rangeText.textContent = 'Monthly';
+            break;
+        case 'date':
+            rangeText.textContent = 'Custom Date';
+            break;
+    }
+    console.log('Selected range:', range);
+}
+
+function selectYear(year) {
+    const rangeText = document.getElementById('range-text');
+    rangeText.textContent = year;
+    console.log('Selected year:', year);
+    // Add logic to filter data by year
+}
+
+function selectQuarter(quarter, range) {
+    const rangeText = document.getElementById('range-text');
+    rangeText.textContent = range;
+    console.log('Selected quarter:', quarter, range);
+    // Add logic to filter data by quarter
+}
+
+function applyDateRange() {
+    const startDate = document.getElementById('start-date').value;
+    const endDate = document.getElementById('end-date').value;
+    const rangeText = document.getElementById('range-text');
+    
+    if (startDate && endDate) {
+        rangeText.textContent = `${startDate} to ${endDate}`;
+        console.log('Date range:', startDate, 'to', endDate);
+        // Add logic to filter data by date range
+    } else {
+        alert('Please select both start and end dates');
+    }
+}
+
+function toggleSubmenu(submenu) {
+    // This function can be used if you want click-to-open behavior
+    // Currently using hover behavior with CSS groups
+    console.log('Toggle submenu:', submenu);
+}
+
+function selectMonth(month) {
+    const rangeText = document.getElementById('range-text');
+    rangeText.textContent = month;
+    console.log('Selected month:', month);
+    // Add logic to filter data by month
+}
+</script>
+
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
 {% endblock %}

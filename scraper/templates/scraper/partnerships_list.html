@@ -2,10 +2,110 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 
+<<<<<<< HEAD
 <!-- Page Header -->
 <div class="mb-6">
     <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
     <p class="text-gray-500 text-sm mt-1">Showing {{ partnerships|length }} partnerships</p>
+=======
+<!-- Page Header with Add Button -->
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
+        <p class="text-gray-500 text-sm mt-1">Showing {{ partnerships|length }} partnerships</p>
+    </div>
+    
+    <!-- Add Partnership Button -->
+    <button onclick="openAddPartnershipModal()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Add Partnership
+    </button>
+</div>
+
+<!-- Add Partnership Modal -->
+<div id="addPartnershipModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
+        <!-- Modal Header -->
+        <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-800">Add New Partnership</h3>
+            <button onclick="closeAddPartnershipModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Modal Body -->
+        <form method="POST" action="{% url 'new_partnership' %}" class="p-6">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                    <select name="country" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">Select Country</option>
+                        {% for c in countries %}
+                            <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                    <input name="company" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input name="email" type="email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input name="phone" type="tel" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Reached?</label>
+                    <select name="reached" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Not Contacted">Not Contacted</option>
+                        <option value="Reached">Reached</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Method</label>
+                    <select name="method" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Not Contacted">Not Contacted</option>
+                        <option value="Email">Email</option>
+                        <option value="Phone">Phone</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea name="notes" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
+                <button type="button" onclick="closeAddPartnershipModal()" 
+                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit" 
+                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                    Save Partnership
+                </button>
+            </div>
+        </form>
+    </div>
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
 </div>
 
 <!-- Table Wrapper -->
@@ -23,8 +123,21 @@
 
         <tbody>
             {% for p in partnerships %}
+<<<<<<< HEAD
             <tr class="border-b hover:bg-gray-50 transition">
                 <td class="p-3 font-medium text-gray-800">{{ p.company }}</td>
+=======
+            <!-- Main Row -->
+            <tr class="border-b hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
+                <td class="p-3 font-medium text-gray-800">
+                    <div class="flex items-center gap-2">
+                        {{ p.company }}
+                        <svg class="w-4 h-4 text-gray-400 transform transition-transform" id="arrow-{{ p.id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </td>
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
                 <td class="p-3">{{ p.country }}</td>
 
                 <!-- Reached Badge -->
@@ -61,6 +174,90 @@
                     </a>
                 </td>
             </tr>
+<<<<<<< HEAD
+=======
+
+            <!-- Details Row (Hidden by default) -->
+            <tr id="details-{{ p.id }}" class="hidden">
+                <td colspan="5" class="p-0">
+                    <div class="bg-gray-50 border-l-4 border-blue-500 p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Meeting Date -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Meeting Date</label>
+                                <input type="date" 
+                                       id="meeting-date-{{ p.id }}"
+                                       value="{{ p.meeting_date|default:'' }}"
+                                       class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                            <!-- Followup Date -->
+                            <div>
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Followup Date</label>
+                                <input type="date" 
+                                       id="followup-date-{{ p.id }}"
+                                       value="{{ p.followup_date|default:'' }}"
+                                       class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            </div>
+
+                            <!-- Comment -->
+                            <div class="md:col-span-1">
+                                <label class="block text-xs font-medium text-gray-600 mb-1">Comment</label>
+                                <textarea id="comment-{{ p.id }}"
+                                          rows="2"
+                                          class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                          placeholder="Add comments...">{{ p.comment|default:'' }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- PDF Upload Section -->
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="flex items-center justify-between mb-3">
+                                <label class="text-xs font-medium text-gray-600">Documents</label>
+                                <span class="text-xs text-gray-500">Drop PDF files here or click to browse</span>
+                            </div>
+                            
+                            <div class="relative">
+                                <div id="drop-zone-{{ p.id }}" 
+                                     class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer bg-white"
+                                     ondrop="handleDrop(event, '{{ p.id }}')"
+                                     ondragover="handleDragOver(event)"
+                                     ondragleave="handleDragLeave(event)">
+                                    
+                                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    
+                                    <p class="text-sm text-gray-600 mb-1">Drop PDF files here</p>
+                                    <p class="text-xs text-gray-500">or <span class="text-blue-600 underline">browse files</span></p>
+                                    
+                                    <input type="file" 
+                                           id="file-input-{{ p.id }}"
+                                           accept=".pdf"
+                                           multiple
+                                           class="hidden"
+                                           onchange="handleFileSelect(event, '{{ p.id }}')">
+                                </div>
+                                
+                                <!-- File List -->
+                                <div id="file-list-{{ p.id }}" class="mt-3 space-y-2 hidden">
+                                    <!-- Files will be listed here -->
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <!-- Save Button -->
+                        <div class="mt-4 flex justify-end gap-2">
+                            <button onclick="saveDetails('{{ p.id }}')" 
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                                Save Details
+                            </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
             {% empty %}
             <tr>
                 <td colspan="5" class="p-6 text-center text-gray-500">
@@ -72,4 +269,153 @@
     </table>
 </div>
 
+<<<<<<< HEAD
+=======
+<script>
+// Modal functions
+function openAddPartnershipModal() {
+    document.getElementById('addPartnershipModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeAddPartnershipModal() {
+    document.getElementById('addPartnershipModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+document.getElementById('addPartnershipModal').addEventListener('click', function(event) {
+    if (event.target === this) {
+        closeAddPartnershipModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeAddPartnershipModal();
+    }
+});
+
+function toggleDetails(partnershipId) {
+    const detailsRow = document.getElementById(`details-${partnershipId}`);
+    const arrow = document.getElementById(`arrow-${partnershipId}`);
+    
+    if (detailsRow.classList.contains('hidden')) {
+        detailsRow.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+    } else {
+        detailsRow.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+    }
+}
+
+function saveDetails(partnershipId) {
+    const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value;
+    const followupDate = document.getElementById(`followup-date-${partnershipId}`).value;
+    const comment = document.getElementById(`comment-${partnershipId}`).value;
+    
+    // Here you can add AJAX call to save the data
+    console.log('Saving details for partnership', partnershipId, {
+        meetingDate,
+        followupDate,
+        comment
+    });
+    
+    // For now, just show a success message
+    alert('Details saved successfully!');
+}
+
+// File upload functions
+function handleDragOver(event) {
+    event.preventDefault();
+    event.currentTarget.classList.add('border-blue-500', 'bg-blue-50');
+}
+
+function handleDragLeave(event) {
+    event.preventDefault();
+    event.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+}
+
+function handleDrop(event, partnershipId) {
+    event.preventDefault();
+    event.currentTarget.classList.remove('border-blue-500', 'bg-blue-50');
+    
+    const files = event.dataTransfer.files;
+    handleFiles(files, partnershipId);
+}
+
+function handleFileSelect(event, partnershipId) {
+    const files = event.target.files;
+    handleFiles(files, partnershipId);
+}
+
+function handleFiles(files, partnershipId) {
+    const fileList = document.getElementById(`file-list-${partnershipId}`);
+    const dropZone = document.getElementById(`drop-zone-${partnershipId}`);
+    
+    // Show file list container
+    fileList.classList.remove('hidden');
+    
+    // Process each file
+    Array.from(files).forEach(file => {
+        if (file.type === 'application/pdf') {
+            addFileToList(file, partnershipId);
+        } else {
+            alert(`${file.name} is not a PDF file. Please upload only PDF files.`);
+        }
+    });
+}
+
+function addFileToList(file, partnershipId) {
+    const fileList = document.getElementById(`file-list-${partnershipId}`);
+    
+    const fileItem = document.createElement('div');
+    fileItem.className = 'flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-200';
+    
+    fileItem.innerHTML = `
+        <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/>
+            </svg>
+            <span class="text-sm text-gray-700">${file.name}</span>
+            <span class="text-xs text-gray-500">(${formatFileSize(file.size)})</span>
+        </div>
+        <button onclick="removeFile(this, '${file.name}')" class="text-red-500 hover:text-red-700">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    `;
+    
+    fileList.appendChild(fileItem);
+}
+
+function removeFile(button, fileName) {
+    button.parentElement.remove();
+    console.log('Removed file:', fileName);
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Make drop zone clickable
+document.addEventListener('DOMContentLoaded', function() {
+    // This will be called for each partnership when the page loads
+    const dropZones = document.querySelectorAll('[id^="drop-zone-"]');
+    dropZones.forEach(zone => {
+        zone.addEventListener('click', function() {
+            const partnershipId = this.id.replace('drop-zone-', '');
+            document.getElementById(`file-input-${partnershipId}`).click();
+        });
+    });
+});
+</script>
+
+>>>>>>> 8546da5 (Initial commit: Django scraper project)
 {% endblock %}
