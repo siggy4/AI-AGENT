@@ -56,7 +56,9 @@
                     {% endfor %}
                 </select>
             </div>
-
+ 
+    
+        
             <!-- Apply Button -->
             <button type="submit"
                     class="w-full bg-blue-600 text-white text-xs py-2 rounded hover:bg-blue-700">
@@ -93,12 +95,12 @@
                 </button>
                 
                 <button class="tab-header px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 transition-colors" 
-                        onclick="switchTab('projects', this)">
+                        onclick="switchTab('add-opportunity', this)">
                     <div class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
-                        Projects
+                        add opportunity
                     </div>
                 </button>
             </div>
@@ -194,16 +196,113 @@
                     
                     
                 </div>
-
-                <!-- Projects Tab Content -->
-                <div id="projects-content" class="tab-content hidden">
+               
+ <!-- Add Opportunity Tab Content -->
+                <div id="add-opportunity-content" class="tab-content hidden">
+                    <div class="mb-4 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">New Opportunity</h3>
+                            <p class="text-sm text-gray-600 mt-1">Create and manage new opportunities</p>
+                        </div>
+                    </div>
                     
+                    <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl m-4">
+                        <form method="POST" action="{% url 'new_opportunities' %}" class="p-6">
+                            {% csrf_token %}
+                            
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Field</th>
+                                        <th class="border border-gray-200 px-4 py-3 text-left text-sm font-medium text-gray-700">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Source name</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="company" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Title</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="Title" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Url</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="url" type="url" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Category</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="Category" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Country</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <select name="country" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
+                                                <option value="">Select Country</option>
+                                                {% for c in countries %}
+                                                    <option value="{{ c }}">{{ c }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Active</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <select name="active" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="Not Active">Not Active</option>
+                                                <option value="Active">Active</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Deadline</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="Deadline" type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Posted date</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <input name="Posted Date" type="date" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Analyzed</td>
+                                        <td class="border border-gray-200 px-4 py-3">
+                                            <select name="analyzed" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="Not Analyzed">Not Analyzed</option>
+                                                <option value="Analyzed">Analyzed</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-6">
+                                <button type="button" data-url="{% url 'opportunities_page' %}" onclick="window.location.href=this.dataset.url" 
+                                        class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button type="submit" 
+                                        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                    POST
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+               
             </div>
         </div>
     </div>
-
 <script>
 function switchTab(tabName, element) {
     // Remove active class from all tabs

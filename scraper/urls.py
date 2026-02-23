@@ -3,7 +3,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 from .views import opportunities_page, run_scraper_api, home, dashboard_page, new_partnership_page, about_page, \
-    partnerships_list, opportunities_list
+    partnerships_list, opportunities_list, new_opportunities
 
 from scraper import views
 from scraper.views import OpportunityViewSet
@@ -24,6 +24,7 @@ urlpatterns = [
     # opportunity detail view
     path('opportunities/', opportunities_page, name='opportunities_page'),
     path('opportunity_list/', opportunities_list, name='opportunities'),
+    path('new_opportunity/', new_opportunities, name='new_opportunities'),
     path('scap_opportunities/', run_scraper_api, name='scrap_opportunities'),
 
     path('about/', about_page, name='about'),
