@@ -82,6 +82,27 @@ def opportunities_list(request):
         'title': title,
     })
 
+def new_opportunities(request):
+    if request.method =='POST':
+        #process form and save the data to the database
+        Opportunity.objects.create(
+            source_name=request.POST.get('company'),   
+            title=request.POST.get('Title'),
+            url=request.POST.get('url'),
+            category=request.POST.get('Category'),
+            country=request.POST.get('country'),
+            active=request.POST.get('active') == 'Active',
+            deadline=request.POST.get('Deadline') or None,
+            posted_date=request.POST.get('Posted Date') or None,
+            analyzed=request.POST.get('analyzed') == 'Analyzed',
+        )
+        return redirect('opportunities_page')
+    
+    # pass countries from a lib to template for rendering
+    countries = [(country.name) for country in pycountry.countries]
+    return render(request, 'scraper/opportunities.html', {
+        'countries': countries,
+    })
 
 # RUN SCRAPER API
 def run_scraper_api(request):
