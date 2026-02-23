@@ -4,30 +4,32 @@ from pydantic import BaseModel
 from typing import List
 from .models import Opportunity
 from firecrawl import Firecrawl
+#from django.db import models
+
 
 firecrawl = Firecrawl(api_key="fc-0d3f0027ab614353a6256aefc731844a")
 
 
 # 1. Define the structure you want Firecrawl to find
 class TenderSchema(BaseModel):
-    id = models.AutoField(primary_key=True)
-    source_name = models.CharField(max_length=100)
-    title = models.TextField()
-    url = models.URLField(unique=True)
-    category = models.CharField(max_length=50, blank=True, null=True)
-    country = models.CharField(max_length=50, blank=True, null=True)
-    active = models.BooleanField(default=True)
-    deadline = models.DateField(blank=True, null=True)
-    posted_date = models.DateField(blank=True, null=True)
-    scraped_at = models.DateTimeField(auto_now_add=True)
-    analyzed = models.BooleanField(default=False)
+    id: int | None = None
+    source_name: str
+    title: str
+    url: str
+    category: str | None = None
+    country: str | None = None
+    active: bool = True
+    deadline: str | None = None
+    posted_date: str | None = None
+    scraped_at: str | None = None
+    analyzed: bool = False
 
 
 class TenderList(BaseModel):
     tenders: List[TenderSchema]
 
 
-def run_firecrawl_scraper():
+def run_scraper():
     doc = firecrawl.scrape("https://tenders.go.ke/tenders", formats=["markdown", "html"])
     print(doc)
     target_url = "https://tenders.go.ke/tenders"
