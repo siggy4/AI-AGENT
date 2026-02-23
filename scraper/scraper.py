@@ -3,38 +3,33 @@ from firecrawl import FirecrawlApp
 from pydantic import BaseModel
 from typing import List
 from .models import Opportunity
-from firecrawl import Firecrawl
-#from django.db import models
 
-firecrawl = Firecrawl(api_key="fc-0d3f0027ab614353a6256aefc731844a")
+firecrawl = FirecrawlApp(api_key="fc-0d3f0027ab614353a6256aefc731844a")
 
 
 # 1. Define the structure you want Firecrawl to find
 class TenderSchema(BaseModel):
-    id: int | None = None
     source_name: str
     title: str
     url: str
-    category: str | None = None
-    country: str | None = None
+    category: str = ""
+    country: str = ""
     active: bool = True
-    deadline: str | None = None
-    posted_date: str | None = None
-    scraped_at: str | None = None
+    deadline: str = ""
+    posted_date: str = ""
     analyzed: bool = False
 
 
 class TenderList(BaseModel):
     tenders: List[TenderSchema]
 
+
 def run_scraper():
-    doc = firecrawl.scrape("https://tenders.go.ke/tenders", formats=["markdown", "html"])
-    print(doc)
     target_url = "https://tenders.go.ke/tenders"
 
     # 2. Tell Firecrawl to scrape and extract based on your schema
     # This replaces all the BeautifulSoup 'find' and 'select' logic
-    result = app.scrape_url(
+    result = firecrawl.scrape_url(
         url=target_url,
         params={
             "formats": ["json"],
@@ -60,3 +55,8 @@ def run_scraper():
                 scraped_count += 1
 
     return {"status": "success", "new_items": scraped_count}
+
+
+def run_scraper():
+    """Legacy function name for backward compatibility"""
+    return run_firecrawl_scraper()
