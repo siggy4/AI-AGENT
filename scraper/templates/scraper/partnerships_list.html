@@ -1,6 +1,42 @@
 {% extends "scraper/base.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+
+
+<!-- Page Header -->
+<!-- Page Header with Add Button -->
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
+        <p class="text-gray-500 text-sm mt-1">Showing {{ partnerships|length }} partnerships</p>
+    </div>
+    
+    <!-- Add Partnership Button -->
+    <button onclick="openAddPartnershipModal()" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Add Partnership
+    </button>
+</div>
+
+ <!-- Delete Selected Partnerships Button -->
+  <div class="mb-6 flex justify-between items-center">
+    <div>
+        <form method="POST" action="{% url 'delete_selected_partnerships' %}">
+            {% csrf_token %}
+            <button type="submit"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Delete Selected
+            </button>
+        </form>
+    </div>
+</div>
+
 <!-- Page Header -->
 <div class="mb-6">
     <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
@@ -45,7 +81,7 @@
         </button>
     </div>
 
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
 <!-- Add Partnership Modal -->
 <div id="addPartnershipModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
     <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
@@ -126,7 +162,7 @@
             </div>
         </form>
     </div>
-<<<<<<< HEAD
+
 
 </div>
 
@@ -134,12 +170,11 @@
 
 
 <div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-100">
-=======
+
 </div>
 
 <!-- Table Wrapper -->
 <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
     <table class="w-full text-sm">
         <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
             <tr class="text-left text-gray-700">
@@ -155,7 +190,7 @@
         <tbody>
 
             {% for p in partnerships %}
-<<<<<<< HEAD
+
 
                 <tr class="border-b hover:bg-gray-50 transition cursor-pointer">
                     <!-- Checkbox -->
@@ -167,10 +202,10 @@
             <!-- Main Row -->
             <tr class="border-b hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
                 <td class="p-3 font-medium text-gray-800">
-=======
+
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
                 <td class="p-4 font-medium text-gray-900">
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
                     <div class="flex items-center gap-2">
                         {{ p.company }}
                         <svg class="w-4 h-4 text-gray-400 transform transition-transform" id="arrow-{{ p.id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,17 +213,17 @@
                         </svg>
                     </div>
                 </td>
-<<<<<<< HEAD
+
 
                 <td class="p-3">{{ p.get_country_display  }}</td>
 
             <!-- Reached Badge -->
                 <td class="p-3">
-=======
+
                 <td class="p-4 text-gray-600">{{ p.country }}</td>
                 <td class="p-4 text-gray-600">{{ p.source|default:"N/A" }}</td>
                 <td class="p-4">
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
                     {% if p.reached == "Reached" %}
                         <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Contacted</span>
                     {% else %}
@@ -388,11 +423,9 @@
 
 
                 </td>
-<<<<<<< HEAD
             </tr>
-=======
             </tr> {% empty %}
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
             <tr>
                 <td colspan="6" class="p-6 text-center text-gray-500">
                     No records found.
@@ -403,11 +436,10 @@
         </tbody>
     </table>
 </div>
-<<<<<<< HEAD
 
-=======
+
 </div>
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
 <script>
 // Modal functions
 function openAddPartnershipModal() {
@@ -418,7 +450,7 @@ function closeAddPartnershipModal() {
     document.getElementById('addPartnershipModal').classList.add('hidden');
 }
 
-<<<<<<< HEAD
+
 function saveDetails(partnershipId) {
     const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value;
     const meetingType = document.getElementById(`meeting-type-${partnershipId}`).value;
@@ -465,9 +497,8 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-=======
 // Toggle details dropdown
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
 function toggleDetails(partnershipId) {
     const detailsRow = document.getElementById(`details-${partnershipId}`);
     const arrow = document.getElementById(`arrow-${partnershipId}`);
@@ -492,7 +523,7 @@ function toggleFeedback(feedbackId) {
 }
 
 function saveDetails(partnershipId) {
-<<<<<<< HEAD
+
     const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value || null;
     const followupDate = document.getElementById(`followup-date-${partnershipId}`).value || null;
     const meetingType = document.getElementById(`meeting-type-${partnershipId}`).value;
@@ -526,7 +557,7 @@ function saveDetails(partnershipId) {
         console.error('Error:', error);
         alert('An unexpected error occurred.');
     });
-=======
+
     const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value;
     const followupDate = document.getElementById(`followup-date-${partnershipId}`).value;
     const contactMethod = document.getElementById(`contact-method-${partnershipId}`).value;
@@ -550,7 +581,6 @@ function saveDetails(partnershipId) {
     });
     
     alert('Details saved successfully!');
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
 }
 
 
@@ -663,8 +693,6 @@ document.getElementById('select-all').addEventListener('change', function() {
 
 </script>
 
-<<<<<<< HEAD
-=======
 
 <!-- Back Button -->
 <div class="mt-8 text-center">
@@ -696,5 +724,5 @@ window.addEventListener('scroll', function() {
 });
 </script>
 
->>>>>>> 35bf4f141795fc318ac26ef72ed82baec216d209
+
 {% endblock %}
