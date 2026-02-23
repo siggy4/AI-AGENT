@@ -25,7 +25,7 @@ urlpatterns = [
     path('delete-selected/', views.delete_selected_partnerships, name='delete_selected_partnerships'),
     path('update_partnership/<int:pk>/', views.update_partnership, name='update_partnership'),
     path('update-partnership-details/<int:pk>/', views.update_partnership_details, name='update_partnership_details'),
- 
+    path('save-pdf/<int:pk>/', views.save_pdf, name='save_pdf'),
 
     # opportunity detail view
     path('opportunities/', opportunities_page, name='opportunities_page'),

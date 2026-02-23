@@ -91,26 +91,26 @@ def run_scraper_api(request):
 
 
 # NEW PARTNERSHIP
+# NEW PARTNERSHIP
 @login_required
-
 def new_partnership_page(request):
     if request.method == 'POST':
-        form = PartnershipForm(request.POST, request.FILES)  # NOTE: request.FILES for file upload
-        if form.is_valid():
-            partnership = form.save(commit=False)
-            partnership.is_manual = True
-            partnership.save()
-            return redirect('dashboard_page')  # or wherever you want
-    else:
-        form = PartnershipForm()
+        # process form and save the data to the database
+        Partnership.objects.create(
+            country=request.POST.get('country'),
+            company=request.POST.get('company'),
+            email=request.POST.get('email'),
+            phone=request.POST.get('phone'),
+            reached=request.POST.get('reached'),
+            method=request.POST.get('method'),
+            notes=request.POST.get('notes', ''),
+        )
 
-    return render(request, 'scraper/new_partnership.html', {'form': form})
-
-    countries = [country.name for country in pycountry.countries]
-
+        return redirect('dashboard_page')
+    # pass countries from a lib to template for rendering
+    countries = [(country.name) for country in pycountry.countries]
     return render(request, 'scraper/new_partnership.html', {
-        'form': form,
-        'countries': countries
+        'countries': countries,
     })
 
 def manual_partnerships(request):
@@ -223,25 +223,13 @@ def partnerships_list(request):
 @login_required
 def delete_selected_partnerships(request):
     if request.method == 'POST':
-        selected_ids = request.POST.getlist('selected_partnerships')
-        if not selected_ids:
-            messages.warning(request, "No partnerships selected for deletion.")
-            return redirect('partnerships')
-
-        # Delete the selected partnerships
-        Partnership.objects.filter(id__in=selected_ids).delete()
-        messages.success(request, f"{len(selected_ids)} partnership(s) deleted successfully.")
-        return redirect('partnerships')
-
-    # If GET request, just redirect
-    return redirect('partnerships')
-    
-
-    return render(request, "scraper/partnerships_list.html", {
-        "partnerships": partnerships,
-        "title": title,
-    })
-
+        ids = request.POST.getlist('selected_partnerships')
+        if ids:
+            Partnership.objects.filter(id__in=ids).delete()
+            messages.success(request, f'{len(ids)} partnership(s) deleted successfully.')
+        else:
+            messages.warning(request, 'No partnerships selected for deletion.')
+    return redirect('partnerships') 
 
 # update partnerships
 def update_partnership(request, pk):
@@ -258,5 +246,16 @@ def update_partnership(request, pk):
         "p": partnership
     })
 
+# save pdf file for partnership
+@login_required
+def save_pdf(request, pk):
+    partnership = Partnership.objects.get(pk=pk)
 
+    if request.method == "POST":
+        pdf = request.FILES.get("pdf_file")
 
+        if pdf:
+            partnership.pdf_file = pdf
+            partnership.save()
+
+    return redirect("partnerships")

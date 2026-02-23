@@ -1,42 +1,6 @@
 {% extends "scraper/base.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-
-
-<!-- Page Header -->
-<!-- Page Header with Add Button -->
-<div class="mb-6 flex justify-between items-center">
-    <div>
-        <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
-        <p class="text-gray-500 text-sm mt-1">Showing {{ partnerships|length }} partnerships</p>
-    </div>
-    
-    <!-- Add Partnership Button -->
-    <button onclick="openAddPartnershipModal()" 
-            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-        </svg>
-        Add Partnership
-    </button>
-</div>
-
- <!-- Delete Selected Partnerships Button -->
-  <div class="mb-6 flex justify-between items-center">
-    <div>
-        <form method="POST" action="{% url 'delete_selected_partnerships' %}">
-            {% csrf_token %}
-            <button type="submit"
-                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors shadow-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                Delete Selected
-            </button>
-        </form>
-    </div>
-</div>
-
 <!-- Page Header -->
 <div class="mb-6">
     <h2 class="text-xl font-bold text-gray-800">{{ title }}</h2>
@@ -81,7 +45,6 @@
         </button>
     </div>
 
-
 <!-- Add Partnership Modal -->
 <div id="addPartnershipModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
     <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
@@ -109,7 +72,7 @@
                         {% endfor %}
                     </select>
                 </div>
-
+                
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
                     <input name="company" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -162,15 +125,6 @@
             </div>
         </form>
     </div>
-
-
-</div>
-
-<!-- Table Wrapper -->
-
-
-<div class="overflow-x-auto bg-white rounded-xl shadow border border-gray-100">
-
 </div>
 
 <!-- Table Wrapper -->
@@ -188,24 +142,9 @@
         </thead>
 
         <tbody>
-
             {% for p in partnerships %}
-
-
-                <tr class="border-b hover:bg-gray-50 transition cursor-pointer">
-                    <!-- Checkbox -->
-                    <td class="p-3 text-center">
-                        <input type="checkbox" name="selected_partnerships" value="{{ p.id }}" class="select-checkbox">
-                    </td>
-                
-
-            <!-- Main Row -->
-            <tr class="border-b hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
-                <td class="p-3 font-medium text-gray-800">
-
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
                 <td class="p-4 font-medium text-gray-900">
-
                     <div class="flex items-center gap-2">
                         {{ p.company }}
                         <svg class="w-4 h-4 text-gray-400 transform transition-transform" id="arrow-{{ p.id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,17 +152,9 @@
                         </svg>
                     </div>
                 </td>
-
-
-                <td class="p-3">{{ p.get_country_display  }}</td>
-
-            <!-- Reached Badge -->
-                <td class="p-3">
-
                 <td class="p-4 text-gray-600">{{ p.country }}</td>
                 <td class="p-4 text-gray-600">{{ p.source|default:"N/A" }}</td>
                 <td class="p-4">
-
                     {% if p.reached == "Reached" %}
                         <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Contacted</span>
                     {% else %}
@@ -260,16 +191,6 @@
                                        value="{{ p.meeting_date|default:'' }}"
                                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                             </div>
-                            <!-- Meeting Type -->
-                            <div>
-            <label class="block text-xs font-medium text-gray-600 mb-1">Meeting Type</label>
-            <select id="meeting-type-{{ p.id }}" 
-            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-        <option value="">Select Type</option>
-        <option value="Physical" {% if p.meeting_type == "Physical" %}selected{% endif %}>Physical</option>
-        <option value="Virtual" {% if p.meeting_type == "Virtual" %}selected{% endif %}>Virtual</option>
-    </select>
-</div>
 
                             <!-- Followup Date -->
                             <div>
@@ -366,14 +287,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Save Button gor meeting -->
-<div class="mt-4 flex justify-end gap-2">
-    <button type="button" onclick="saveDetails('{{ p.id }}')" 
-            class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-md text-xs font-semibold shadow-sm transition-all">
-        Save
-    </button>
-</div>
-
 
                         <!-- PDF Upload Section -->
                         <div class="mt-4 border-t border-gray-200 pt-4">
@@ -421,26 +334,36 @@
 
                         
 
-
+                        <!-- Save Button -->
+                        <div class="mt-4 flex justify-end gap-2">
+                            <button onclick="saveDetails('{{ p.id }}')" 
+                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                                Save Details
+                            </button>
+                        </div>
+                    </div>
                 </td>
-            </tr>
             </tr> {% empty %}
-
             <tr>
                 <td colspan="6" class="p-6 text-center text-gray-500">
                     No records found.
                 </td>
             </tr>
-
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-
 </div>
-
 <script>
+
+// select country dropdown
+    document.addEventListener("DOMContentLoaded", function() {
+    new TomSelect("#country-select", {
+        create: false,
+        sortField: { field: "text", direction: "asc" },
+        placeholder: "Search country..."
+    });
+});
 // Modal functions
 function openAddPartnershipModal() {
     document.getElementById('addPartnershipModal').classList.remove('hidden');
@@ -450,55 +373,7 @@ function closeAddPartnershipModal() {
     document.getElementById('addPartnershipModal').classList.add('hidden');
 }
 
-
-function saveDetails(partnershipId) {
-    const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value;
-    const meetingType = document.getElementById(`meeting-type-${partnershipId}`).value;
-
-    // CSRF token
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    fetch(`/update-meeting/${partnershipId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': csrfToken
-        },
-        body: new URLSearchParams({
-            'meeting_date': meetingDate,
-            'meeting_type': meetingType
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            alert('Meeting details saved successfully!');
-        } else {
-            alert('Failed to save meeting details.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while saving.');
-    });
-}
-
-// Close modal when clicking outside
-document.getElementById('addPartnershipModal').addEventListener('click', function(event) {
-    if (event.target === this) {
-        closeAddPartnershipModal();
-    }
-});
-
-// Close modal with Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        closeAddPartnershipModal();
-    }
-});
-
 // Toggle details dropdown
-
 function toggleDetails(partnershipId) {
     const detailsRow = document.getElementById(`details-${partnershipId}`);
     const arrow = document.getElementById(`arrow-${partnershipId}`);
@@ -523,41 +398,6 @@ function toggleFeedback(feedbackId) {
 }
 
 function saveDetails(partnershipId) {
-
-    const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value || null;
-    const followupDate = document.getElementById(`followup-date-${partnershipId}`).value || null;
-    const meetingType = document.getElementById(`meeting-type-${partnershipId}`).value;
-    const comment = document.getElementById(`comment-${partnershipId}`).value;
-
-    // CSRF token from your template
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    fetch(`/update-partnership-details/${partnershipId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({
-            meeting_date: meetingDate,
-            followup_date: followupDate,
-            meeting_type: meetingType,
-            comment: comment
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Details saved successfully!');
-        } else {
-            alert('Error saving details: ' + (data.error || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An unexpected error occurred.');
-    });
-
     const meetingDate = document.getElementById(`meeting-date-${partnershipId}`).value;
     const followupDate = document.getElementById(`followup-date-${partnershipId}`).value;
     const contactMethod = document.getElementById(`contact-method-${partnershipId}`).value;
@@ -582,7 +422,6 @@ function saveDetails(partnershipId) {
     
     alert('Details saved successfully!');
 }
-
 
 // File upload functions
 function handleDragOver(event) {
@@ -684,13 +523,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-// Select All Checkbox
-document.getElementById('select-all').addEventListener('change', function() {
-    const checkboxes = document.querySelectorAll('.select-checkbox');
-    checkboxes.forEach(cb => cb.checked = this.checked);
-});
-
 </script>
 
 
@@ -723,6 +555,5 @@ window.addEventListener('scroll', function() {
     }
 });
 </script>
-
 
 {% endblock %}
