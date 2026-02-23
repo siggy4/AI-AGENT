@@ -7,6 +7,5 @@ psycopg2-binary
 bs4
 pycountry
 python-dotenv
-firecrawl
-
-
+firecrawl-py
+pydantic

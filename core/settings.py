@@ -13,17 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 # This tells Python to find your text file and read the secrets inside
-dotenv_path = BASE_DIR / "scratch.env"
-# Tell dotenv exactly which file to look for
-load_dotenv(dotenv_path)
-# This creates a variable that Django can "see" project-wide
-
-
+load_dotenv()
 
 # Now load the key into a variable Django can use
 FIRECRAWL_API_KEY = os.getenv("fc-0d3f0027ab614353a6256aefc731844a")

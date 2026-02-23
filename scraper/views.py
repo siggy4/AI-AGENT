@@ -40,10 +40,14 @@ def opportunities_page(request):
     total = Opportunity.objects.count()
     analyzed = Opportunity.objects.filter(analyzed=True).count()
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
+    opportunities = Opportunity.objects.all().order_by('-id')
+    countries = [(country.name) for country in pycountry.countries]
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
         'latest': latest,
+        'opportunities': opportunities,
+        'countries': countries,
     })
 
 
@@ -52,9 +56,12 @@ def opportunities_list(request):
     opportunities = Opportunity.objects.all().order_by('-id')
     if flt == "analyzed":
         opportunities = opportunities.filter(analyzed=True)
+    
+    title = "All Opportunities" if flt != "analyzed" else "Analyzed Opportunities"
 
     return render(request, 'scraper/opportunities_list.html', {
         'opportunities': opportunities,
+        'title': title,
     })
 
 
@@ -104,6 +111,9 @@ def home(request):
 @login_required
 def partnerships_list(request):
     flt = request.GET.get("filter")
+    
+    # pass countries from a lib to template for rendering
+    countries = [(country.name) for country in pycountry.countries]
 
     if flt == "contacted":
         partnerships = Partnership.objects.filter(reached="Reached")
@@ -117,6 +127,15 @@ def partnerships_list(request):
         partnerships = Partnership.objects.all().order_by("-id")
         title = "All Companies"
 
+    return render(request, "scraper/partnerships_list.html", {
+        "partnerships": partnerships,
+        "title": title,
+        "countries": countries,
+})
+
+    # pass countries from a lib to template for rendering
+    countries = [(country.name) for country in pycountry.countries]
+    
     return render(request, "scraper/partnerships_list.html", {
         "partnerships": partnerships,
         "title": title,
