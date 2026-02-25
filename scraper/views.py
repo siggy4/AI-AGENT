@@ -101,6 +101,7 @@ def new_partnership_page(request):
         Partnership.objects.create(
             country=request.POST.get('country'),
             company=request.POST.get('company'),
+            source=request.POST.get('source'),
             email=request.POST.get('email'),
             phone=request.POST.get('phone'),
             reached=request.POST.get('reached'),

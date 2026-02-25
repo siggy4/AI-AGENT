@@ -1,4 +1,5 @@
 {% extends "scraper/base.html" %}
+{% load static %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 <!-- Page Header -->
@@ -87,7 +88,16 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
                     <input name="company" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                    <select name="source" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Inbound" title="Website Inquiry, Direct Email, Referral (Client), Referral (Partner)">Inbound</option>
+                        <option value="Outbound" title="Cold Outreach, LinkedIn/Social Media, Lead Generation Campaign">Outbound</option>
+                        <option value="Events" title="Industry Conference, Trade Show, Networking Event, Webinar">Events</option>
+                        <option value="Institutional" title="Government Tender, NGO/Donor Network, Chambers of Commerce">Institutional</option>
+                        <option value="Internal" title="Board Member Connection, Employee Referral, Existing Client Upsell">Internal</option>
+                    </select>
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input name="email" type="email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -562,5 +572,7 @@ window.addEventListener('scroll', function() {
     }
 });
 </script>
+
+<script src="{% static 'js/script.js' %}"></script>
 
 {% endblock %}
