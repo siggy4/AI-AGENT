@@ -9,6 +9,18 @@ from scraper.scraper import run_scraper
 from scraper.serializer import OpportunitySerializer
 import pycountry
 
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import Partnership
+from .forms import PartnershipForm
+from django.contrib import messages
+
+from django.http import JsonResponse
+from .models import Partnership
+import json
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
+
 
 # API VIEWSET
 class OpportunityViewSet(viewsets.ModelViewSet):
@@ -40,18 +52,14 @@ def opportunities_page(request):
     total = Opportunity.objects.count()
     analyzed = Opportunity.objects.filter(analyzed=True).count()
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
-<<<<<<< HEAD
-=======
+
     opportunities = Opportunity.objects.all().order_by('-id')
->>>>>>> 8546da5 (Initial commit: Django scraper project)
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
         'latest': latest,
-<<<<<<< HEAD
-=======
-        'opportunities': opportunities,
->>>>>>> 8546da5 (Initial commit: Django scraper project)
+
+        'opportunities': opportunities
     })
 
 
@@ -75,26 +83,32 @@ def run_scraper_api(request):
 
 # NEW PARTNERSHIP
 @login_required
+
 def new_partnership_page(request):
     if request.method == 'POST':
-        # process form and save the data to the database
-        Partnership.objects.create(
-            country=request.POST.get('country'),
-            company=request.POST.get('company'),
-            email=request.POST.get('email'),
-            phone=request.POST.get('phone'),
-            reached=request.POST.get('reached'),
-            method=request.POST.get('method'),
-            notes=request.POST.get('notes', ''),
-        )
+        form = PartnershipForm(request.POST, request.FILES)  # NOTE: request.FILES for file upload
+        if form.is_valid():
+            partnership = form.save(commit=False)
+            partnership.is_manual = True
+            partnership.save()
+            return redirect('dashboard_page')  # or wherever you want
+    else:
+        form = PartnershipForm()
 
-        return redirect('dashboard_page')
-    # pass countries from a lib to template for rendering
-    countries = [(country.name) for country in pycountry.countries]
+    return render(request, 'scraper/new_partnership.html', {'form': form})
+
+    countries = [country.name for country in pycountry.countries]
+
     return render(request, 'scraper/new_partnership.html', {
-        'countries': countries,
+        'form': form,
+        'countries': countries
     })
 
+def manual_partnerships(request):
+    partnerships = Partnership.objects.filter(is_manual=True)
+    return render(request, "scraper/manual_partnership.html", {
+        "partnerships": partnerships
+    })
 
 # ABOUT
 def about_page(request):
@@ -107,6 +121,59 @@ def home(request):
         return redirect('dashboard_page')
     return render(request, 'scraper/home.html')
 
+
+
+
+#new partnership pGE
+def create_partnership_api(request):
+    if request.method == "POST":
+        form = PartnershipForm(request.POST)
+        if form.is_valid():
+            partnership = form.save(commit=False)
+            partnership.is_manual = True
+            partnership.save()
+            return JsonResponse({"status": "success", "id": partnership.id})
+        return JsonResponse({"status": "error", "errors": form.errors}, status=400)
+    return JsonResponse({"status": "error", "message": "POST required"}, status=405)
+
+#delete/edit partnership
+from django.shortcuts import get_object_or_404
+
+def edit_partnership(request, pk):
+    partnership = get_object_or_404(Partnership, pk=pk)
+    form = PartnershipForm(request.POST or None, instance=partnership)
+    if form.is_valid():
+        form.save()
+        return redirect('manual_partnerships')
+    return render(request, "scraper/edit_partnership.html", {"form": form})
+
+
+#update partnership
+def update_partnership_details(request, pk):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            p = Partnership.objects.get(pk=pk)
+
+            # Convert string to date if provided
+            meeting_date_str = data.get('meeting_date')
+            followup_date_str = data.get('followup_date')
+
+            p.meeting_date = datetime.strptime(meeting_date_str, '%Y-%m-%d').date() if meeting_date_str else None
+            p.followup_date = datetime.strptime(followup_date_str, '%Y-%m-%d').date() if followup_date_str else None
+
+            p.meeting_type = data.get('meeting_type') or None
+            p.comment = data.get('comment') or ''
+            p.save()
+
+            return JsonResponse({'success': True})
+        except Partnership.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Partnership not found'})
+        except ValueError as ve:
+            # This catches invalid date formats
+            return JsonResponse({'success': False, 'error': f'Invalid date format: {ve}'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 # partnerships list
 @login_required
@@ -125,22 +192,31 @@ def partnerships_list(request):
         partnerships = Partnership.objects.all().order_by("-id")
         title = "All Companies"
 
-<<<<<<< HEAD
+
     return render(request, "scraper/partnerships_list.html", {
         "partnerships": partnerships,
         "title": title,
-=======
+    })
     # pass countries from a lib to template for rendering
     countries = [(country.name) for country in pycountry.countries]
+
+#delete partnerships
+@login_required
+def delete_selected_partnerships(request):
+    if request.method == 'POST':
+        selected_ids = request.POST.getlist('selected_partnerships')
+        if not selected_ids:
+            messages.warning(request, "No partnerships selected for deletion.")
+            return redirect('partnerships')
+
+        # Delete the selected partnerships
+        Partnership.objects.filter(id__in=selected_ids).delete()
+        messages.success(request, f"{len(selected_ids)} partnership(s) deleted successfully.")
+        return redirect('partnerships')
+
+    # If GET request, just redirect
+    return redirect('partnerships')
     
-    return render(request, "scraper/partnerships_list.html", {
-        "partnerships": partnerships,
-        "title": title,
-        "countries": countries,
->>>>>>> 8546da5 (Initial commit: Django scraper project)
-    })
-
-
 # update partnerships
 def update_partnership(request, pk):
     partnership = Partnership.objects.get(id=pk)
@@ -155,3 +231,6 @@ def update_partnership(request, pk):
     return render(request, "scraper/update_partnership.html", {
         "p": partnership
     })
+
+
+

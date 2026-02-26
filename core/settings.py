@@ -1,26 +1,23 @@
-from pathlib import Path
 import os
-import environ
+from pathlib import Path
+from dotenv import load_dotenv
 
-# Env
-env = environ.Env(DEBUG=(bool, False))
-
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-if os.path.exists(BASE_DIR / '.env'):
-    environ.Env.read_env(BASE_DIR / '.env')
+# Load .env file from project root
+dotenv_path = BASE_DIR / "scratch.env"  # place scratch.env in your project root
+load_dotenv(dotenv_path)
 
-FIRECRAWL_API_KEY = env('FIRECRAWL_API_KEY')
-FIRECRAWL_API_URL = env('FIRECRAWL_API_URL')
+# Now load environment variables safely
+FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY")  # use the correct key name in your .env
 
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
+# Quick-start development settings
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
+DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+ALLOWED_HOSTS = ['192.168.1.104', 'localhost', '127.0.0.1']
 
-ALLOWED_HOSTS = env.list(
-    'ALLOWED_HOSTS',
-    default=['localhost', '127.0.0.1', '192.168.1.104']
-)
-
+# Applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,8 +25,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django_countries",
     'rest_framework',
     'scraper',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -61,27 +60,31 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static files
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

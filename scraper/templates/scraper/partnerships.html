@@ -1,0 +1,20 @@
+<h1>Partnerships Page</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Partnership</button>
+</form>
+
+<h2>Existing Partnerships</h2>
+<ul>
+    {% for p in partnerships %}
+        <li>
+            <strong>{{ p.company }}</strong> - {{ p.source }} - {{ p.country }} - {{ p.office_location }}
+            <br>
+            Comment: {{ p.comment }}
+        </li>
+    {% empty %}
+        <li>No partnerships yet.</li>
+    {% endfor %}
+</ul>
