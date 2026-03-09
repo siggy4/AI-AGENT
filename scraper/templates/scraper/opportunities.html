@@ -210,17 +210,7 @@
                         <p class="text-sm text-gray-600 mt-1">Browse and manage available opportunities ({{ opportunities|length }} found)</p>
                     </div>
 
-                    <!-- Test button for debugging -->
-                    <div class="mb-4">
-                        <button onclick="alert('Test: JavaScript is working!')" class="bg-green-600 text-white px-3 py-1 rounded text-xs">
-                            Test JavaScript
-                        </button>
-                        {% if opportunities %}
-                            <button onclick="addInterest({{ opportunities.0.id }})" class="bg-blue-600 text-white px-3 py-1 rounded text-xs ml-2">
-                                Test Interest (First Opportunity)
-                            </button>
-                        {% endif %}
-                    </div>
+                   
 
 <!-- Opportunities Table -->
                     <div class="overflow-x-auto bg-white border border-gray-200 rounded-lg">
