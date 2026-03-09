@@ -8,11 +8,12 @@ class PartnershipForm(forms.ModelForm):
             'partner_name',
             'company',
             'country',
+            'notes',
             'point_of_contact',
             'partnership_type',
             'start_date',
             'status',
-            
+
 
         ]
         
@@ -20,4 +21,8 @@ class PartnershipForm(forms.ModelForm):
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'partnership_type': forms.Select(),
             'status': forms.Select(),
+         
         }
+
+  
+  

@@ -24,7 +24,7 @@ urlpatterns = [
     path('delete-selected/', views.delete_selected_partnerships, name='delete_selected_partnerships'),
     path('update_partnership/<int:pk>/', views.update_partnership, name='update_partnership'),
     path('update-partnership-details/<int:pk>/', views.update_partnership_details, name='update_partnership_details'),
-    path('save-pdf/<int:pk>/', views.save_pdf, name='save_pdf'),
+    #path('save-pdf/<int:pk>/', views.save_pdf, name='save_pdf'),
 
     # opportunity detail view
     path('opportunities/', opportunities_page, name='opportunities_page'),
@@ -39,5 +39,11 @@ urlpatterns = [
     path('manual/', views.manual_partnerships, name='manual_partnerships'),
     path('edit/<int:pk>/', views.edit_partnership, name='edit_partnership'),
     
-   
+    # PDF Management URLs
+    path('partnerships/', views.partnerships_list, name='partnerships_list'),
+    path('partnerships/<int:partnership_id>/', views.partnership_detail, name='partnership_detail'),
+    path('partnerships/<int:partnership_id>/upload-pdf/', views.upload_pdf, name='upload_pdf'),
+    path('partnerships/<int:partnership_id>/view-pdf/', views.view_pdf, name='view_pdf'),
+    path('partnerships/<int:partnership_id>/rename-pdf/', views.rename_pdf, name='rename_pdf'),
+    path('partnerships/<int:partnership_id>/delete-pdf/', views.delete_pdf, name='delete_pdf'),
 ]

@@ -1,8 +1,10 @@
 import django.contrib.gis.geoip2.resources
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, FileResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_http_methods
 from rest_framework import viewsets
+import os
 
 from scraper.models import Opportunity, Partnership
 from scraper.scraper import run_scraper
@@ -11,12 +13,10 @@ import pycountry
 
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .models import Partnership
+from .models import Partnership,PartnershipPDF
 from .forms import PartnershipForm
 from django.contrib import messages
 
-from django.http import JsonResponse
-from .models import Partnership
 import json
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
@@ -152,8 +152,6 @@ def home(request):
     return render(request, 'scraper/home.html')
 
 
-
-
 #new partnership pGE
 def create_partnership_api(request):
     if request.method == "POST":
@@ -167,7 +165,6 @@ def create_partnership_api(request):
     return JsonResponse({"status": "error", "message": "POST required"}, status=405)
 
 #delete/edit partnership
-from django.shortcuts import get_object_or_404
 
 def edit_partnership(request, pk):
     partnership = get_object_or_404(Partnership, pk=pk)
@@ -225,20 +222,11 @@ def partnerships_list(request):
         partnerships = Partnership.objects.all().order_by("-id")
         title = "All Companies"
 
-
-    return render(request, "scraper/partnerships_list.html", {
-        "partnerships": partnerships,
-        "title": title,
-    })
-
     return render(request, "scraper/partnerships_list.html", {
         "partnerships": partnerships,
         "title": title,
         "countries": countries,
-})
-
-    # pass countries from a lib to template for rendering
-    countries = [(country.name) for country in pycountry.countries]
+    })
 
 #delete partnerships
 @login_required
@@ -267,16 +255,99 @@ def update_partnership(request, pk):
         "p": partnership
     })
 
-# save pdf file for partnership
-@login_required
-def save_pdf(request, pk):
-    partnership = Partnership.objects.get(pk=pk)
-
+#upload pdf
+@csrf_exempt
+def upload_pdf(request, pk):
     if request.method == "POST":
-        pdf = request.FILES.get("pdf_file")
+        partnership = Partnership.objects.get(pk=pk)
+        files = request.FILES.getlist("files")
 
-        if pdf:
-            partnership.pdf_file = pdf
+        saved = []
+
+        for f in files:
+            pdf = PartnershipPDF.objects.create(
+                partnership=partnership,
+                file=f
+            )
+
+            saved.append({
+                "id": pdf.id,
+                "url": pdf.file.url,
+                "name": pdf.filename()
+            })
+
+        return JsonResponse({"success": True, "files": saved})
+
+    return JsonResponse({"success": False})
+
+#delete pdf
+@csrf_exempt
+def delete_pdf(request, pk):
+    if request.method == "POST":
+        pdf = PartnershipPDF.objects.get(pk=pk)
+        pdf.delete()
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def rename_pdf(request, partnership_id):
+    """Handle PDF title renaming via AJAX"""
+    try:
+        partnership = get_object_or_404(Partnership, id=partnership_id)
+        data = json.loads(request.body)
+        new_title = data.get('title', '').strip()
+        if not new_title:
+            return JsonResponse({'success': False, 'error': 'Title cannot be empty'})
+        partnership.pdf_title = new_title
+        partnership.save()
+        return JsonResponse({
+            'success': True,
+            'new_title': new_title
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+def view_pdf(request, partnership_id):
+    """Display PDF in browser"""
+    partnership = get_object_or_404(Partnership, id=partnership_id)
+    if not partnership.pdf_file:
+        messages.error(request, 'No PDF file found for this partnership.')
+        return redirect('partnership_list')
+    try:
+        filename = partnership.pdf_title or f"{partnership.partner_name or partnership.company}_partnership.pdf"
+        return FileResponse(
+            partnership.pdf_file.open('rb'),
+            content_type='application/pdf',
+            filename=f"{filename}.pdf"
+        )
+    except FileNotFoundError:
+        messages.error(request, 'PDF file not found.')
+        return redirect('partnership_list')
+
+def delete_pdf(request, partnership_id):
+    """Delete PDF from partnership"""
+    partnership = get_object_or_404(Partnership, id=partnership_id)
+    if request.method == 'POST':
+        if partnership.pdf_file:
+            # Delete file from storage
+            if os.path.isfile(partnership.pdf_file.path):
+                os.remove(partnership.pdf_file.path)
+            # Clear PDF fields
+            partnership.pdf_file = None
+            partnership.pdf_title = None
             partnership.save()
+            messages.success(request, f'PDF deleted successfully from {partnership.partner_name or partnership.company}!')
+        else:
+            messages.warning(request, 'No PDF file to delete.')
+        return redirect('partnership_list')
 
-    return redirect("partnerships")
+def partnership_detail(request, partnership_id):
+    """Display partnership details with PDF management"""
+    partnership = get_object_or_404(Partnership, id=partnership_id)
+    context = {
+        'partnership': partnership,
+        'upload_form': PartnershipPDFForm(instance=partnership)
+    }
+    return render(request, 'scraper/partnerships_list.html', context)
