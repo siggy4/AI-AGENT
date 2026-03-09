@@ -16,6 +16,27 @@ class Opportunity(models.Model):
     analyzed = models.BooleanField(default=False)
 
 
+class Interest(models.Model):
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name='interests')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    notes = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[
+        ('interested', 'Interested'),
+        ('contacted', 'Contacted'),
+        ('applied', 'Applied'),
+        ('rejected', 'Rejected'),
+        ('withdrawn', 'Withdrawn'),
+    ], default='interested')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['opportunity', 'user']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.opportunity.title[:50]}"
+
+
 class Partnership(models.Model):
     country = models.CharField(max_length=100)
     company = models.CharField(max_length=255)
@@ -28,9 +49,3 @@ class Partnership(models.Model):
 
     def __str__(self):
         return f"{self.company} - {self.country}"
-
-    def __str__(self):
-        return f"{self.company} - {self.country}"
-
-    def __str__(self):
-        return self.title
