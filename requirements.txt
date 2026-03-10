@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 aiohappyeyeballs==2.6.1
 aiohttp==3.13.3
 aiosignal==1.4.0
@@ -35,3 +36,16 @@ typing_extensions==4.15.0
 urllib3==2.6.3
 websockets==16.0
 yarl==1.22.0
+=======
+Django~=4.1.7
+pip~=21.2.4
+djangorestframework~=3.14.0
+requests~=2.32.3
+dj-database-url
+psycopg2-binary
+bs4
+pycountry
+python-dotenv
+firecrawl-py
+pydantic
+>>>>>>> asc
