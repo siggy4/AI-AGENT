@@ -25,7 +25,7 @@ services:
       "
 
   db:
-    image: postgres:13
+    image: postgres:15
     environment:
       POSTGRES_DB: sources
       POSTGRES_USER: postgres
