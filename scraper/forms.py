@@ -1,5 +1,8 @@
 from django import forms
-from .models import Partnership
+from .models import Partnership, PartnershipPDF
+ 
+
+
 
 class PartnershipForm(forms.ModelForm):
     class Meta:
@@ -24,5 +27,9 @@ class PartnershipForm(forms.ModelForm):
          
         }
 
-  
+
+class PDFUploadForm(forms.ModelForm):
+    class Meta:
+        model = PartnershipPDF
+        fields = ["file"]
   

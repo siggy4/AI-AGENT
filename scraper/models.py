@@ -9,7 +9,6 @@ class Opportunity(models.Model):
     url = models.URLField(unique=True)
     category = models.CharField(max_length=50, blank=True, null=True)
     country = models.CharField(max_length=50, blank=True, null=True)
-    #country = CountryField(blank=True)
     active = models.BooleanField(default=True)
     deadline = models.DateField(blank=True, null=True)
     posted_date = models.DateField(blank=True, null=True)
@@ -85,11 +84,7 @@ class Partnership(models.Model):
 
 
 class PartnershipPDF(models.Model):
-    partnership = models.ForeignKey(
-        Partnership,
-        on_delete=models.CASCADE,
-        related_name="pdfs"
-    )
+    partnership = models.ForeignKey(Partnership,on_delete=models.CASCADE,related_name="pdfs")
     file = models.FileField(upload_to="partnership_pdfs/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
@@ -100,21 +95,6 @@ class PartnershipPDF(models.Model):
         return self.filename()
 
 
-    @property
-    def pdf_display_name(self):
-        """Return the custom PDF title or generate one from partnership details"""
-        if self.pdf_title:
-            return self.pdf_title
-        elif self.pdf_file:
-            return f"{self.partner_name or self.company} - Partnership Document"
-        return None
-
-    def has_pdf(self):
-        """Check if partnership has an associated PDF"""
-        return bool(self.pdf_file)
-
-    def __str__(self):
-        return f"{self.company} - {self.country}"
 
     # created_at = models.DateTimeField(auto_now_add=True)
     # source = models.CharField(max_length=200, blank=True, null=True)

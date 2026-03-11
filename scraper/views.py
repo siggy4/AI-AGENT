@@ -14,13 +14,13 @@ import pycountry
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .models import Partnership,PartnershipPDF
-from .forms import PartnershipForm
+from .forms import PartnershipForm, PDFUploadForm
 from django.contrib import messages
 
 import json
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
-
+from django.views.decorators.http import require_POST
 
 # API VIEWSET
 class OpportunityViewSet(viewsets.ModelViewSet):
@@ -229,16 +229,15 @@ def partnerships_list(request):
     })
 
 #delete partnerships
-@login_required
-def delete_selected_partnerships(request):
-    if request.method == 'POST':
-        ids = request.POST.getlist('selected_partnerships')
-        if ids:
-            Partnership.objects.filter(id__in=ids).delete()
-            messages.success(request, f'{len(ids)} partnership(s) deleted successfully.')
-        else:
-            messages.warning(request, 'No partnerships selected for deletion.')
-    return redirect('partnerships') 
+@require_POST
+def delete_partnership(request, pk):
+
+    partnership = get_object_or_404(Partnership, pk=pk)
+
+    if request.method == "POST":
+        partnership.delete()
+
+    return redirect("partnerships")
 
 # update partnerships
 def update_partnership(request, pk):
@@ -255,94 +254,7 @@ def update_partnership(request, pk):
         "p": partnership
     })
 
-#upload pdf
-@csrf_exempt
-def upload_pdf(request, pk):
-    if request.method == "POST":
-        partnership = Partnership.objects.get(pk=pk)
-        files = request.FILES.getlist("files")
-
-        saved = []
-
-        for f in files:
-            pdf = PartnershipPDF.objects.create(
-                partnership=partnership,
-                file=f
-            )
-
-            saved.append({
-                "id": pdf.id,
-                "url": pdf.file.url,
-                "name": pdf.filename()
-            })
-
-        return JsonResponse({"success": True, "files": saved})
-
-    return JsonResponse({"success": False})
-
-#delete pdf
-@csrf_exempt
-def delete_pdf(request, pk):
-    if request.method == "POST":
-        pdf = PartnershipPDF.objects.get(pk=pk)
-        pdf.delete()
-        return JsonResponse({"success": True})
-
-    return JsonResponse({"success": False})
-
-@require_http_methods(["POST"])
-@csrf_exempt
-def rename_pdf(request, partnership_id):
-    """Handle PDF title renaming via AJAX"""
-    try:
-        partnership = get_object_or_404(Partnership, id=partnership_id)
-        data = json.loads(request.body)
-        new_title = data.get('title', '').strip()
-        if not new_title:
-            return JsonResponse({'success': False, 'error': 'Title cannot be empty'})
-        partnership.pdf_title = new_title
-        partnership.save()
-        return JsonResponse({
-            'success': True,
-            'new_title': new_title
-        })
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})
-
-def view_pdf(request, partnership_id):
-    """Display PDF in browser"""
-    partnership = get_object_or_404(Partnership, id=partnership_id)
-    if not partnership.pdf_file:
-        messages.error(request, 'No PDF file found for this partnership.')
-        return redirect('partnership_list')
-    try:
-        filename = partnership.pdf_title or f"{partnership.partner_name or partnership.company}_partnership.pdf"
-        return FileResponse(
-            partnership.pdf_file.open('rb'),
-            content_type='application/pdf',
-            filename=f"{filename}.pdf"
-        )
-    except FileNotFoundError:
-        messages.error(request, 'PDF file not found.')
-        return redirect('partnership_list')
-
-def delete_pdf(request, partnership_id):
-    """Delete PDF from partnership"""
-    partnership = get_object_or_404(Partnership, id=partnership_id)
-    if request.method == 'POST':
-        if partnership.pdf_file:
-            # Delete file from storage
-            if os.path.isfile(partnership.pdf_file.path):
-                os.remove(partnership.pdf_file.path)
-            # Clear PDF fields
-            partnership.pdf_file = None
-            partnership.pdf_title = None
-            partnership.save()
-            messages.success(request, f'PDF deleted successfully from {partnership.partner_name or partnership.company}!')
-        else:
-            messages.warning(request, 'No PDF file to delete.')
-        return redirect('partnership_list')
-
+#partnership detail 
 def partnership_detail(request, partnership_id):
     """Display partnership details with PDF management"""
     partnership = get_object_or_404(Partnership, id=partnership_id)
@@ -351,3 +263,56 @@ def partnership_detail(request, partnership_id):
         'upload_form': PartnershipPDFForm(instance=partnership)
     }
     return render(request, 'scraper/partnerships_list.html', context)
+
+
+    #upload pdf
+def upload_pdf(request, partnership_id):
+
+    partnership = get_object_or_404(Partnership, id=partnership_id)
+
+    if request.method == "POST":
+
+        files = request.FILES.getlist("files")
+
+        for f in files:
+            PartnershipPDF.objects.create(
+                partnership=partnership,
+                file=f
+            )
+
+        return redirect("upload_pdf", partnership_id=partnership.id)
+
+    pdfs = partnership.pdfs.all()
+
+    context = {
+        "partnership": partnership,
+        "pdfs": pdfs
+    }
+
+    return render(request, "partnership_pdfs.html", context)
+
+# view pdf
+def view_pdf(request, pdf_id):
+
+    pdf = get_object_or_404(PartnershipPDF, id=pdf_id)
+
+    return FileResponse(
+        pdf.file.open("rb"),
+        content_type="scraper/pdf"
+    )
+
+#delete pdf
+def delete_pdf(request, pdf_id):
+
+    pdf = get_object_or_404(PartnershipPDF, id=pdf_id)
+
+    partnership_id = pdf.partnership.id
+
+    if request.method == "POST":
+
+        if os.path.isfile(pdf.file.path):
+            os.remove(pdf.file.path)
+
+        pdf.delete()
+
+    return redirect("upload_pdf", partnership_id=partnership_id)
