@@ -1,5 +1,6 @@
 import django.contrib.gis.geoip2.resources
 from django.contrib.auth.decorators import login_required
+<<<<<<< HEAD
 from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -21,6 +22,19 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.views.decorators.http import require_POST
+=======
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from .models import Opportunity, Partnership, Interest
+import pycountry
+from django.contrib.auth.decorators import login_required
+from scraper.serializer import OpportunitySerializer
+import pycountry
+from rest_framework import viewsets
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
 # API VIEWSET
 class OpportunityViewSet(viewsets.ModelViewSet):
@@ -51,6 +65,7 @@ def dashboard_page(request):
 def opportunities_page(request):
     total = Opportunity.objects.count()
     analyzed = Opportunity.objects.filter(analyzed=True).count()
+<<<<<<< HEAD
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
 
     opportunities = Opportunity.objects.all().order_by('-id')
@@ -58,14 +73,85 @@ def opportunities_page(request):
     opportunities = Opportunity.objects.all().order_by('-id')
     countries = [(country.name) for country in pycountry.countries]
 
+=======
+    countries = [(country.name) for country in pycountry.countries]
+    
+    # Define categories
+    categories = [
+        'Expression of Interest',
+        'Request for Proposal', 
+        'Grants',
+        'Invitation to Bid',
+        'Grant Support',
+        'Call for Individual',
+        'Call for Implementing Partners',
+        'Others'
+    ]
+    
+    # Get filter parameters
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    category_filter = request.GET.get('category')
+    country_filter = request.GET.get('country')
+    
+    # Base queryset
+    opportunities = Opportunity.objects.all().order_by('-id')
+    
+    # Apply date filtering
+    if start_date:
+        opportunities = opportunities.filter(posted_date__gte=start_date)
+    if end_date:
+        opportunities = opportunities.filter(posted_date__lte=end_date)
+    
+    # Apply category filtering
+    if category_filter:
+        opportunities = opportunities.filter(category__iexact=category_filter)
+    
+    # Apply country filtering
+    if country_filter:
+        opportunities = opportunities.filter(country__iexact=country_filter)
+    
+    latest = opportunities[:10]  # Get latest from filtered results
+    
+    # Get user's interests
+    user_interests = Interest.objects.filter(user=request.user).select_related('opportunity').order_by('-created_at')
+    
+    # Calculate submission statistics
+    total_submissions = user_interests.count()
+    pending_submissions = user_interests.filter(status='interested').count()
+    submitted_submissions = user_interests.filter(status='applied').count()
+    failed_submissions = user_interests.filter(status='rejected').count()
+    
+    # Calculate response statistics (based on contact status)
+    total_responses = user_interests.filter(status__in=['contacted', 'applied', 'rejected']).count()
+    positive_responses = user_interests.filter(status='applied').count()  # Applied = positive response
+    negative_responses = user_interests.filter(status='rejected').count()  # Rejected = negative response
+    pending_responses = user_interests.filter(status='contacted').count()  # Contacted = pending response
+    
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
         'latest': latest,
+<<<<<<< HEAD
 
         'opportunities': opportunities,
         'countries': countries,
 
+=======
+        'opportunities': opportunities,
+        'countries': countries,
+        'categories': categories,
+        'user_interests': user_interests,
+        'total_submissions': total_submissions,
+        'pending_submissions': pending_submissions,
+        'submitted_submissions': submitted_submissions,
+        'failed_submissions': failed_submissions,
+        'total_responses': total_responses,
+        'positive_responses': positive_responses,
+        'negative_responses': negative_responses,
+        'pending_responses': pending_responses,
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
     })
 
 
@@ -119,6 +205,10 @@ def new_partnership_page(request):
         Partnership.objects.create(
             country=request.POST.get('country'),
             company=request.POST.get('company'),
+<<<<<<< HEAD
+=======
+            source=request.POST.get('source'),
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
             email=request.POST.get('email'),
             phone=request.POST.get('phone'),
             reached=request.POST.get('reached'),
@@ -133,11 +223,6 @@ def new_partnership_page(request):
         'countries': countries,
     })
 
-def manual_partnerships(request):
-    partnerships = Partnership.objects.filter(is_manual=True)
-    return render(request, "scraper/manual_partnership.html", {
-        "partnerships": partnerships
-    })
 
 # ABOUT
 def about_page(request):
@@ -151,6 +236,7 @@ def home(request):
     return render(request, 'scraper/home.html')
 
 
+<<<<<<< HEAD
 #new partnership pGE
 def create_partnership_api(request):
     if request.method == "POST":
@@ -172,34 +258,56 @@ def edit_partnership(request, pk):
         form.save()
         return redirect('manual_partnerships')
     return render(request, "scraper/edit_partnership.html", {"form": form})
+=======
+# Interest Management Views
+@require_POST
+@login_required
+def add_interest(request, opportunity_id):
+    opportunity = get_object_or_404(Opportunity, id=opportunity_id)
+    
+    # Check if interest already exists
+    if Interest.objects.filter(opportunity=opportunity, user=request.user).exists():
+        return JsonResponse({'success': False, 'error': 'Already interested in this opportunity'})
+    
+    # Create new interest
+    Interest.objects.create(
+        opportunity=opportunity,
+        user=request.user,
+        status='interested'
+    )
+    
+    return JsonResponse({'success': True})
 
 
-#update partnership
-def update_partnership_details(request, pk):
-    if request.method == 'POST':
+@require_POST
+@login_required
+def remove_interest(request, interest_id):
+    interest = get_object_or_404(Interest, id=interest_id, user=request.user)
+    interest.delete()
+    
+    return JsonResponse({'success': True})
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
+
+@require_POST
+@login_required
+def update_interest(request, interest_id):
+    interest = get_object_or_404(Interest, id=interest_id, user=request.user)
+    
+    try:
+        import json
         data = json.loads(request.body)
-        try:
-            p = Partnership.objects.get(pk=pk)
-
-            # Convert string to date if provided
-            meeting_date_str = data.get('meeting_date')
-            followup_date_str = data.get('followup_date')
-
-            p.meeting_date = datetime.strptime(meeting_date_str, '%Y-%m-%d').date() if meeting_date_str else None
-            p.followup_date = datetime.strptime(followup_date_str, '%Y-%m-%d').date() if followup_date_str else None
-
-            p.meeting_type = data.get('meeting_type') or None
-            p.comment = data.get('comment') or ''
-            p.save()
-
+        new_status = data.get('status')
+        
+        if new_status in ['interested', 'contacted', 'applied', 'rejected', 'withdrawn']:
+            interest.status = new_status
+            interest.save()
             return JsonResponse({'success': True})
-        except Partnership.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Partnership not found'})
-        except ValueError as ve:
-            # This catches invalid date formats
-            return JsonResponse({'success': False, 'error': f'Invalid date format: {ve}'})
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid status'})
+    except (json.JSONDecodeError, KeyError):
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
 
-    return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 # partnerships list
 @login_required
@@ -208,6 +316,11 @@ def partnerships_list(request):
     
     # pass countries from a lib to template for rendering
     countries = [(country.name) for country in pycountry.countries]
+    
+    # Calculate statistics for cards
+    total_partnerships = Partnership.objects.count()
+    total_partnerships_contacted = Partnership.objects.filter(reached="Reached").count()
+    not_contacted = Partnership.objects.filter(reached="Not Contacted").count()
 
     if flt == "contacted":
         partnerships = Partnership.objects.filter(reached="Reached")
@@ -225,6 +338,7 @@ def partnerships_list(request):
         "partnerships": partnerships,
         "title": title,
         "countries": countries,
+<<<<<<< HEAD
     })
 
 #delete partnerships
@@ -235,6 +349,12 @@ def delete_partnership(request, pk):
 
     if request.method == "POST":
         partnership.delete()
+=======
+        "total_partnerships": total_partnerships,
+        "total_partnerships_contacted": total_partnerships_contacted,
+        "not_contacted": not_contacted,
+    })
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
     return redirect("partnerships")
 
@@ -252,6 +372,7 @@ def update_partnership(request, pk):
     return render(request, "scraper/update_partnership.html", {
         "p": partnership
     })
+<<<<<<< HEAD
 
 #partnership detail 
 def partnership_detail(request, partnership_id):
@@ -316,3 +437,5 @@ def delete_pdf(request, pdf_id):
             os.remove(pdf.file.path)
         pdf.delete()
         return redirect("partnerships")
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc

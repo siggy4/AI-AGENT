@@ -1,4 +1,5 @@
 {% extends "scraper/base.html" %}
+{% load static %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 <!-- Page Header -->
@@ -54,8 +55,11 @@
             
         </div>
     </div>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
 <!-- Add Partnership Modal -->
 <div id="addPartnershipModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
@@ -89,7 +93,16 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
                     <input name="company" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
-
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Source</label>
+                    <select name="source" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Inbound" title="Website Inquiry, Direct Email, Referral (Client), Referral (Partner)">Inbound</option>
+                        <option value="Outbound" title="Cold Outreach, LinkedIn/Social Media, Lead Generation Campaign">Outbound</option>
+                        <option value="Events" title="Industry Conference, Trade Show, Networking Event, Webinar">Events</option>
+                        <option value="Institutional" title="Government Tender, NGO/Donor Network, Chambers of Commerce">Institutional</option>
+                        <option value="Internal" title="Board Member Connection, Employee Referral, Existing Client Upsell">Internal</option>
+                    </select>
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input name="email" type="email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500" required>
@@ -159,6 +172,7 @@
         </thead>
 
         <tbody>
+<<<<<<< HEAD
 
               <!--Delete Form-->
             {% for p in partnerships %}
@@ -167,6 +181,9 @@
 
     <!-- Action buttons -->
     <td class="px-4 py-2 flex gap-2">
+=======
+            {% for p in partnerships %}
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
                 <td class="p-4" onclick="event.stopPropagation()">
                     <input type="checkbox" class="partnership-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="{{ p.id }}" onchange="updateDeleteButton()">
@@ -326,6 +343,7 @@
                                 </div>
                             </div>
                         </div>
+<<<<<<< HEAD
 
                        
     <!-- PDF LIST -->
@@ -403,6 +421,8 @@
                                        
                                      </div>   
 
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
         <!-- Upload Area (Right Side) -->
        
@@ -421,12 +441,15 @@
 </div>
                         
 
+<<<<<<< HEAD
                <div id="pdfModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
     <div class="bg-white w-4/5 h-4/5 rounded shadow relative">
         <button onclick="closePDF()" class="absolute top-2 right-3 text-xl">✕</button>
         <iframe id="pdfFrame" class="w-full h-full"></iframe>
     </div>
 </div>
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
                         <!-- Save Button -->
                         <div class="mt-4 flex justify-end gap-2">
                             <button onclick="saveDetails('{{ p.id }}')" 
@@ -436,8 +459,12 @@
                         </div>
                     </div>
                 </td>
+<<<<<<< HEAD
             </tr> 
             {% empty %}
+=======
+            </tr> {% empty %}
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
             <tr>
                 <td colspan="7" class="p-6 text-center text-gray-500">
                     No records found.
@@ -518,6 +545,7 @@ function saveDetails(partnershipId) {
     alert('Details saved successfully!');
 }
 
+<<<<<<< HEAD
 
 
 function uploadFiles(files, id){
@@ -596,6 +624,8 @@ function openPDF(url){
 function closePDF(){
     document.getElementById("pdfModal").classList.add("hidden");
 }
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 // File upload functions
 function handleDragOver(event) {
     event.preventDefault();
@@ -815,4 +845,10 @@ selectAll.addEventListener("change", function(){
 }
 </script>
 
+<<<<<<< HEAD
 {% endblock %}
+=======
+<script src="{% static 'js/script.js' %}"></script>
+
+{% endblock %}
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc

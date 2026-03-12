@@ -8,22 +8,97 @@
     <p class="text-gray-500 text-sm mt-1">Overview of Opportunities found</p>
 </div>
 
+
 <!-- Cards -->
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-3">
 
     <!-- Total -->
     <a href="{% url 'opportunities' %}?filter=all"
-       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
-        <p class="text-gray-500 text-sm">Total</p>
-        <p class="text-3xl font-extrabold text-gray-800 mt-1">{{ total_opportunities }}</p>
+       class="p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition duration-200 block">
+        <p class="text-gray-500 text-xs">Total</p>
+        <p class="text-2xl font-extrabold text-gray-800 mt-1">{{ total_opportunities }}</p>
     </a>
 
-    <!-- Contacted -->
+    <!-- Analyzed -->
     <a href="{% url 'opportunities' %}?filter=analyzed"
-       class="p-5 border border-gray-200 rounded-xl shadow-sm hover:shadow transition duration-200 block">
-        <p class="text-gray-500 text-sm">Analyzed</p>
-        <p class="text-3xl font-extrabold text-blue-600 mt-1">{{ total_analyzed }}</p>
+       class="p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition duration-200 block">
+        <p class="text-gray-500 text-xs">Analyzed</p>
+        <p class="text-2xl font-extrabold text-gray-800 mt-1">{{ total_analyzed }}</p>
     </a>
+
+    <!-- Submissions Card (Card with nested cards) -->
+    <div class="md:col-span-2 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition duration-200 p-3 cursor-pointer" onclick="switchTab('interests', this)">
+        <div class="flex items-center justify-between mb-3">
+            <div>
+                <p class="text-gray-500 text-xs">Submissions</p>
+                <p class="text-2xl font-extrabold text-gray-800 mt-1">{{ total_submissions }}</p>
+            </div>
+            <div class="bg-gray-100 p-2 rounded-lg">
+                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Nested Cards Inside Submissions Card -->
+        <div class="grid grid-cols-3 gap-2">
+            <!-- Pending Submissions (Inner Card 1) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Pending</div>
+                <div class="text-lg font-bold text-gray-800">{{ pending_submissions }}</div>
+            </div>
+            
+            <!-- Submitted Submissions (Inner Card 2) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Submitted</div>
+                <div class="text-lg font-bold text-gray-800">{{ submitted_submissions }}</div>
+            </div>
+            
+            <!-- Failed Submissions (Inner Card 3) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Failed</div>
+                <div class="text-lg font-bold text-gray-800">{{ failed_submissions }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Response Card (Card with nested cards) -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow transition duration-200 p-3 cursor-pointer" onclick="switchTab('interests', this)">
+        <div class="flex items-center justify-between mb-3">
+            <div>
+                <p class="text-gray-500 text-xs">Response</p>
+                <p class="text-2xl font-extrabold text-gray-800 mt-1">{{ total_responses }}</p>
+            </div>
+            <div class="bg-gray-100 p-2 rounded-lg">
+                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Nested Cards Inside Response Card -->
+        <div class="grid grid-cols-3 gap-2">
+            <!-- Positive Responses (Inner Card 1) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Positive</div>
+                <div class="text-lg font-bold text-gray-800">{{ positive_responses }}</div>
+            </div>
+            
+            <!-- Negative Responses (Inner Card 2) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Negative</div>
+                <div class="text-lg font-bold text-gray-800">{{ negative_responses }}</div>
+            </div>
+            
+            <!-- Pending Responses (Inner Card 3) -->
+            <div class="bg-gray-50 border border-gray-200 rounded p-2 text-center hover:bg-gray-100 transition-all">
+                <div class="text-gray-500 text-xs font-medium mb-1">Pending</div>
+                <div class="text-lg font-bold text-gray-800">{{ pending_responses }}</div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <!-- Opportunities Section -->
@@ -41,7 +116,7 @@
                 <select name="country" class="w-full border rounded px-2 py-1.5 text-sm">
                     <option value="">All Countries</option>
                     {% for country in countries %}
-                        <option value="{{ country }}">{{ country }}</option>
+                        <option value="{{ country }}" {% if request.GET.country == country %}selected{% endif %}>{{ country }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -52,11 +127,106 @@
                 <select name="category" class="w-full border rounded px-2 py-1.5 text-sm">
                     <option value="">All Categories</option>
                     {% for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
+                        <option value="{{ category }}" {% if request.GET.category == category %}selected{% endif %}>{{ category }}</option>
                     {% endfor %}
                 </select>
             </div>
- 
+  <!-- Range Button -->
+    <div class="relative group">
+        <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span id="range-text">Date Range</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </button>
+        
+        <!-- Dropdown Menu -->
+        <div class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+            <!-- Yearly Option -->
+            <div class="relative group/yearly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-lg flex justify-between items-center" onclick="toggleSubmenu('yearly')">
+                    <span>Yearly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="yearly-submenu" class="absolute left-full top-0 mr-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/yearly:opacity-100 group-hover/yearly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2024)">2024</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2023)">2023</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2022)">2022</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectYear(2021)">2021</a>
+                </div>
+            </div>
+
+            <!-- Quarterly Option -->
+            <div class="relative group/quarterly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex justify-between items-center" onclick="toggleSubmenu('quarterly')">
+                    <span>Quarterly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="quarterly-submenu" class="absolute left-full top-0 mr-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/quarterly:opacity-100 group-hover/quarterly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q1', 'Jan - Mar')">Q1 (Jan - Mar)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q2', 'Apr - Jun')">Q2 (Apr - Jun)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q3', 'Jul - Sep')">Q3 (Jul - Sep)</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectQuarter('Q4', 'Oct - Dec')">Q4 (Oct - Dec)</a>
+                </div>
+            </div>
+
+            <!-- Monthly Option -->
+            <div class="relative group/monthly">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex justify-between items-center" onclick="toggleSubmenu('monthly')">
+                    <span>Monthly</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="monthly-submenu" class="absolute left-full top-0 mr-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover/monthly:opacity-100 group-hover/monthly:visible transition-all duration-200">
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('January')">January</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('February')">February</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('March')">March</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('April')">April</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('May')">May</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('June')">June</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('July')">July</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('August')">August</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('September')">September</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('October')">October</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('November')">November</a>
+                    <a href="#" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="selectMonth('December')">December</a>
+                </div>
+            </div>
+
+            <!-- Custom Date Option -->
+            <div class="relative group/custom date-submenu">
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg flex justify-between items-center" onclick="toggleSubmenu('date')">
+                    <span>Custom Date</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+                <div id="date-submenu" class="absolute left-full top-0 ml-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover/date-submenu:visible transition-all duration-200 p-4">
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Start Date</label>
+                            <input type="date" id="start-date" class="w-full px-2 py-1 text-sm border border-gray-300 rounded">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">End Date</label>
+                            <input type="date" id="end-date" class="w-full px-2 py-1 text-sm border border-gray-300 rounded">
+                        </div>
+                        <button onclick="applyDateRange()" class="w-full bg-blue-600 text-white text-sm py-1 rounded hover:bg-blue-700">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
         
             <!-- Apply Button -->
@@ -111,25 +281,30 @@
                 <div id="opportunities-content" class="tab-content">
                     <div class="mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Opportunities</h3>
-                        <p class="text-sm text-gray-600 mt-1">Browse and manage available opportunities</p>
+                        <p class="text-sm text-gray-600 mt-1">Browse and manage available opportunities ({{ opportunities|length }} found)</p>
                     </div>
+
+                   
 
 <!-- Opportunities Table -->
                     <div class="overflow-x-auto bg-white border border-gray-200 rounded-lg">
                         <table class="min-w-full">
                             <thead>
                                 <tr class="bg-gray-50 border-b border-gray-200">
-                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Opportunity Name
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="2">
+                                        Name
                                     </th>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Date Posted
+                                        Date Published
                                     </th>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Deadline
+                                        Deadline Date
                                     </th>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Country
+                                        Type of Opportunity
+                                    </th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Map Beneficiary Country
                                     </th>
                                     <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Status
@@ -141,16 +316,28 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 {% for opportunity in opportunities %}
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-3 px-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ opportunity.title }}</div>
-                                        <div class="text-xs text-gray-500">{{ opportunity.source_name }}</div>
+                                <tr class="hover:bg-gray-50 transition-colors cursor-pointer" onclick="toggleOpportunityDetails('{{ opportunity.id }}')">
+                                    <td class="py-3 px-4" colspan="2">
+                                        <div class="flex items-center gap-2">
+                                            <div>
+                                                <a href="{{ opportunity.url }}" target="_blank" class="text-sm font-medium text-gray-900 hover:text-blue-600" onclick="event.stopPropagation()">
+                                                    {{ opportunity.title }}
+                                                </a>
+                                                <div class="text-xs text-gray-500">{{ opportunity.source_name }}</div>
+                                            </div>
+                                            <svg class="w-4 h-4 text-gray-400 transform transition-transform" id="opportunity-arrow-{{ opportunity.id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
                                     </td>
                                     <td class="py-3 px-4 text-sm text-gray-600">
                                         {{ opportunity.posted_date|default:"N/A" }}
                                     </td>
                                     <td class="py-3 px-4 text-sm text-gray-600">
                                         {{ opportunity.deadline|default:"N/A" }}
+                                    </td>
+                                    <td class="py-3 px-4 text-sm text-gray-600">
+                                        {{ opportunity.category|default:"N/A" }}
                                     </td>
                                     <td class="py-3 px-4 text-sm text-gray-600">
                                         {{ opportunity.country|default:"N/A" }}
@@ -167,12 +354,108 @@
                                         {% endif %}
                                     </td>
                                     <td class="py-3 px-4 text-center">
-                                        <a href="{{ opportunity.url }}" target="_blank"
-                                           class="text-blue-600 hover:text-blue-900 text-sm font-medium">
-                                            View →
-                                        </a>
+                                        <div class="flex justify-center gap-2">
+                                            <button onclick="addInterest({{ opportunity.id }})" 
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-colors">
+                                                Interested
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
+
+                                <!-- Opportunity Details Row (Hidden by default) -->
+                                <tr id="opportunity-details-{{ opportunity.id }}" class="hidden">
+                                    <td colspan="8" class="p-0">
+                                        <div class="bg-gray-50 border-l-4 border-blue-500 p-6">
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <!-- RF Number -->
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">RF Number</label>
+                                                    <input type="text" 
+                                                           id="opportunity-rf-number-{{ opportunity.id }}"
+                                                           value="{{ opportunity.rf_number|default:'' }}"
+                                                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                           placeholder="Enter RF number">
+                                                </div>
+
+                                                <!-- Type of Opportunity -->
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Type of Opportunity</label>
+                                                    <select id="opportunity-type-{{ opportunity.id }}" 
+                                                            class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                                        <option value="">Select Type</option>
+                                                        <option value="grant" {% if opportunity.type_of_opportunity == 'grant' %}selected{% endif %}>Grant</option>
+                                                        <option value="contract" {% if opportunity.type_of_opportunity == 'contract' %}selected{% endif %}>Contract</option>
+                                                        <option value="funding" {% if opportunity.type_of_opportunity == 'funding' %}selected{% endif %}>Funding</option>
+                                                        <option value="partnership" {% if opportunity.type_of_opportunity == 'partnership' %}selected{% endif %}>Partnership</option>
+                                                        <option value="other" {% if opportunity.type_of_opportunity == 'other' %}selected{% endif %}>Other</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- URL -->
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                                                    <input type="url" 
+                                                           id="opportunity-url-{{ opportunity.id }}"
+                                                           value="{{ opportunity.url|default:'' }}"
+                                                           class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                           placeholder="Enter opportunity URL">
+                                                </div>
+                                            </div>
+
+                                            <!-- Additional Details Section -->
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                                <!-- Left Column -->
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                                        <textarea id="opportunity-notes-{{ opportunity.id }}" 
+                                                                  rows="4"
+                                                                  class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                                  placeholder="Add your notes here...">{{ opportunity.notes|default:"" }}</textarea>
+                                                    </div>
+
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Follow-up Date</label>
+                                                        <input type="date" 
+                                                               id="opportunity-followup-{{ opportunity.id }}"
+                                                               value="{{ opportunity.followup_date|default:'' }}"
+                                                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Right Column -->
+                                                <div class="space-y-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Map Beneficiary Country</label>
+                                                        <select id="opportunity-beneficiary-{{ opportunity.id }}" 
+                                                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                                            <option value="">Select Country</option>
+                                                            {% for country in countries %}
+                                                                <option value="{{ country }}" {% if opportunity.beneficiary_country == country %}selected{% endif %}>{{ country }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Quick Actions</label>
+                                                        <div class="flex flex-wrap gap-2">
+                                                            <button onclick="saveOpportunityDetails({{ opportunity.id }})" 
+                                                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                                                                Save Changes
+                                                            </button>
+                                                            <a href="{{ opportunity.url }}" target="_blank" 
+                                                               class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition-colors">
+                                                                View Opportunity
+                                                            </a>
+                                                            <button onclick="addInterest({{ opportunity.id }})" 
+                                                                    class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm rounded-md transition-colors">
+                                                                Mark as Interested
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                 {% empty %}
                                 <tr>
                                     <td colspan="6" class="px-6 py-8 text-center text-gray-500">
@@ -193,8 +476,182 @@
 
                 <!-- Interests Tab Content -->
                 <div id="interests-content" class="tab-content hidden">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">My Interests</h3>
+                        <p class="text-sm text-gray-600 mt-1">Opportunities you've marked as interested</p>
+                    </div>
                     
-                    
+                    {% if user_interests %}
+                        <div class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-200">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+                                    <tr class="text-left text-gray-700">
+                                        <th class="p-4 font-semibold text-gray-900" colspan="2">Name</th>
+                                        <th class="p-4 font-semibold text-gray-900">Date Published</th>
+                                        <th class="p-4 font-semibold text-gray-900">Deadline Date</th>
+                                        <th class="p-4 font-semibold text-gray-900">Type of Opportunity</th>
+                                        <th class="p-4 font-semibold text-gray-900">Map Beneficiary Country</th>
+                                        <th class="p-4 font-semibold text-gray-900 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for interest in user_interests %}
+                                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="toggleInterestDetails('{{ interest.id }}')">
+                                        <td class="p-4" colspan="2">
+                                            <div class="flex items-center gap-2">
+                                                <div>
+                                                    <a href="{{ interest.opportunity.url }}" target="_blank" class="font-medium text-blue-600 hover:text-blue-800" onclick="event.stopPropagation()">
+                                                        {{ interest.opportunity.title|truncatechars:80 }}
+                                                    </a>
+                                                    <div class="text-xs text-gray-500 mt-1">{{ interest.opportunity.source_name }}</div>
+                                                </div>
+                                                <svg class="w-4 h-4 text-gray-400 transform transition-transform" id="interest-arrow-{{ interest.id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                </svg>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600 text-sm">
+                                            {{ interest.opportunity.posted_date|default:"N/A" }}
+                                        </td>
+                                        <td class="p-4 text-gray-600 text-sm">
+                                            {{ interest.opportunity.deadline|default:"N/A" }}
+                                        </td>
+                                        <td class="p-4 text-gray-600">
+                                            {{ interest.opportunity.category|default:"N/A" }}
+                                        </td>
+                                        <td class="p-4 text-gray-600">
+                                            {{ interest.opportunity.country|default:"N/A" }}
+                                        </td>
+                                        <td class="p-4 text-center">
+                                            <div class="flex justify-center gap-2">
+                                                <button onclick="updateInterestStatus({{ interest.id }})" 
+                                                        class="text-blue-600 hover:text-blue-800 text-sm">
+                                                    Update
+                                                </button>
+                                                <button onclick="removeInterest({{ interest.id }})" 
+                                                        class="text-red-600 hover:text-red-800 text-sm">
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Interest Details Row (Hidden by default) -->
+                                    <tr id="interest-details-{{ interest.id }}" class="hidden">
+                                        <td colspan="7" class="p-0">
+                                            <div class="bg-gray-50 border-l-4 border-blue-500 p-6">
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                    <!-- RF Number -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">RF Number</label>
+                                                        <input type="text" 
+                                                               id="interest-rf-number-{{ interest.id }}"
+                                                               value="{{ interest.opportunity.rf_number|default:'' }}"
+                                                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                               placeholder="Enter RF number">
+                                                    </div>
+
+                                                    <!-- Type of Opportunity -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">Type of Opportunity</label>
+                                                        <select id="interest-type-{{ interest.id }}" 
+                                                                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                                            <option value="">Select Type</option>
+                                                            <option value="grant" {% if interest.opportunity.type_of_opportunity == 'grant' %}selected{% endif %}>Grant</option>
+                                                            <option value="contract" {% if interest.opportunity.type_of_opportunity == 'contract' %}selected{% endif %}>Contract</option>
+                                                            <option value="funding" {% if interest.opportunity.type_of_opportunity == 'funding' %}selected{% endif %}>Funding</option>
+                                                            <option value="partnership" {% if interest.opportunity.type_of_opportunity == 'partnership' %}selected{% endif %}>Partnership</option>
+                                                            <option value="other" {% if interest.opportunity.type_of_opportunity == 'other' %}selected{% endif %}>Other</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- URL -->
+                                                    <div>
+                                                        <label class="block text-sm font-medium text-gray-700 mb-2">URL</label>
+                                                        <input type="url" 
+                                                               id="interest-url-{{ interest.id }}"
+                                                               value="{{ interest.opportunity.url|default:'' }}"
+                                                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                               placeholder="Enter opportunity URL">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Status and Notes Section -->
+                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                                    <!-- Status and Notes -->
+                                                    <div class="space-y-4">
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                                                            <select id="interest-status-{{ interest.id }}" 
+                                                                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                                                <option value="interested" {% if interest.status == 'interested' %}selected{% endif %}>Interested</option>
+                                                                <option value="contacted" {% if interest.status == 'contacted' %}selected{% endif %}>Contacted</option>
+                                                                <option value="applied" {% if interest.status == 'applied' %}selected{% endif %}>Applied</option>
+                                                                <option value="rejected" {% if interest.status == 'rejected' %}selected{% endif %}>Rejected</option>
+                                                                <option value="withdrawn" {% if interest.status == 'withdrawn' %}selected{% endif %}>Withdrawn</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                                                            <textarea id="interest-notes-{{ interest.id }}" 
+                                                                      rows="4"
+                                                                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                                      placeholder="Add your notes here...">{{ interest.notes|default:"" }}</textarea>
+                                                        </div>
+
+                                                       
+                                                    </div>
+
+                                                    
+
+                                                        <div>
+                                                            <label class="block text-sm font-medium text-gray-700 mb-2">Quick Actions</label>
+                                                            <div class="flex flex-wrap gap-2">
+                                                                <button onclick="saveInterestDetails({{ interest.id }})" 
+                                                                        class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors">
+                                                                    Save Changes
+                                                                </button>
+                                                                <a href="{{ interest.opportunity.url }}" target="_blank" 
+                                                                   class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition-colors">
+                                                                    View Opportunity
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    {% if interest.notes %}
+                                    <tr class="bg-gray-50">
+                                        <td colspan="7" class="p-4">
+                                            <div class="text-sm text-gray-600">
+                                                <strong>Notes:</strong> {{ interest.notes }}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-12">
+                            <div class="text-gray-400 mb-4">
+                                <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">No interests yet</h3>
+                            <p class="text-gray-500 mb-6">Start marking opportunities as interested to see them here</p>
+                            <button onclick="switchTab('opportunities', document.querySelector('[onclick*=\"opportunities\"]'))" 
+                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                Browse Opportunities
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
                
  <!-- Add Opportunity Tab Content -->
@@ -239,7 +696,12 @@
                                     <tr>
                                         <td class="border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700">Category</td>
                                         <td class="border border-gray-200 px-4 py-3">
-                                            <input name="Category" type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                            <select name="Category" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                                                <option value="">Select Category</option>
+                                                {% for category in categories %}
+                                                    <option value="{{ category }}">{{ category }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </td>
                                     </tr>
                                     <tr>
@@ -322,6 +784,178 @@ function switchTab(tabName, element) {
     
     // Show corresponding content
     document.getElementById(tabName + '-content').classList.remove('hidden');
+}
+
+// Interest management functions
+function addInterest(opportunityId) {
+    fetch(`/add-interest/${opportunityId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.error || 'Failed to add interest');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred');
+    });
+}
+
+function removeInterest(interestId) {
+    if (confirm('Are you sure you want to remove this interest?')) {
+        fetch(`/remove-interest/${interestId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Failed to remove interest');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred');
+        });
+    }
+}
+
+function updateInterestStatus(interestId) {
+    const status = prompt('Update status (interested, contacted, applied, rejected, withdrawn):');
+    if (status && ['interested', 'contacted', 'applied', 'rejected', 'withdrawn'].includes(status)) {
+        fetch(`/update-interest/${interestId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: status })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Failed to update status');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred');
+        });
+    }
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Toggle interest details dropdown
+function toggleInterestDetails(interestId) {
+    const detailsRow = document.getElementById(`interest-details-${interestId}`);
+    const arrow = document.getElementById(`interest-arrow-${interestId}`);
+    
+    if (detailsRow.classList.contains('hidden')) {
+        detailsRow.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+    } else {
+        detailsRow.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+    }
+}
+
+// Toggle opportunity details dropdown
+function toggleOpportunityDetails(opportunityId) {
+    const detailsRow = document.getElementById(`opportunity-details-${opportunityId}`);
+    const arrow = document.getElementById(`opportunity-arrow-${opportunityId}`);
+    
+    if (detailsRow.classList.contains('hidden')) {
+        detailsRow.classList.remove('hidden');
+        arrow.classList.add('rotate-180');
+    } else {
+        detailsRow.classList.add('hidden');
+        arrow.classList.remove('rotate-180');
+    }
+}
+
+// Save interest details
+function saveInterestDetails(interestId) {
+    const status = document.getElementById(`interest-status-${interestId}`).value;
+    const notes = document.getElementById(`interest-notes-${interestId}`).value;
+    const followupDate = document.getElementById(`interest-followup-${interestId}`).value;
+    
+    fetch(`/update-interest/${interestId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            status: status,
+            notes: notes,
+            followup_date: followupDate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Interest details saved successfully!');
+            // Reload the page to show updated data
+            window.location.reload();
+        } else {
+            alert('Error saving interest details');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving');
+    });
+}
+
+// Save opportunity details
+function saveOpportunityDetails(opportunityId) {
+    const rfNumber = document.getElementById(`opportunity-rf-number-${opportunityId}`).value;
+    const type = document.getElementById(`opportunity-type-${opportunityId}`).value;
+    const url = document.getElementById(`opportunity-url-${opportunityId}`).value;
+    const notes = document.getElementById(`opportunity-notes-${opportunityId}`).value;
+    const followupDate = document.getElementById(`opportunity-followup-${opportunityId}`).value;
+    const beneficiaryCountry = document.getElementById(`opportunity-beneficiary-${opportunityId}`).value;
+    
+    // For now, just show an alert since we don't have an endpoint to update opportunities
+    alert('Opportunity details would be saved here. Backend endpoint needed for updating opportunities.');
+    
+    console.log('Opportunity Details:', {
+        rfNumber,
+        type,
+        url,
+        notes,
+        followupDate,
+        beneficiaryCountry
+    });
 }
 </script>
 

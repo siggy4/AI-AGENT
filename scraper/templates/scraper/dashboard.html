@@ -3,6 +3,7 @@
 {% block content %}
 
 <!-- Header -->
+<<<<<<< HEAD
 
 <div class="mb-6">
     <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
@@ -11,6 +12,15 @@
 
     <!-- Range Button -->
 
+=======
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h2 class="text-xl font-bold text-gray-800">Dashboard</h2>
+        <p class="text-gray-500 text-sm mt-1">Overview of partnership engagement</p>
+    </div>
+    
+    <!-- Range Button -->
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
     <div class="relative group">
         <button class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +91,7 @@
             </div>
 
             <!-- Custom Date Option -->
-            <div class="relative group">
+            <div class="relative group/custom date-submenu">
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-b-lg flex justify-between items-center" onclick="toggleSubmenu('date')">
                     <span>Custom Date</span>
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,8 +164,11 @@
 </div>
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 <!-- Action Button -->
 <div class="mt-8 text-center">
     <a href="{% url 'partnerships' %}" 

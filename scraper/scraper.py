@@ -24,7 +24,11 @@ class TenderList(BaseModel):
     tenders: List[TenderSchema]
 
 
+<<<<<<< HEAD
 def run_scraper():
+=======
+def run_firecrawl_scraper():
+>>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
     target_url = "https://tenders.go.ke/tenders"
 
     # 2. Tell Firecrawl to scrape and extract based on your schema
