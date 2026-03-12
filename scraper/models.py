@@ -77,10 +77,6 @@ class Partnership(models.Model):
     method = models.CharField(max_length=50, null=True, blank=True)
     notes = models.TextField(blank=True, default='')
 
-    # PDF File
-    #pdf_file = models.FileField(upload_to='partnership_pdfs/', blank=True, null=True)
-    #pdf_title = models.CharField(max_length=200, blank=True, null=True, help_text="Custom name for the PDF document")
-
 
 
 class PartnershipPDF(models.Model):

@@ -112,7 +112,6 @@ def run_scraper_api(request):
 
 
 # NEW PARTNERSHIP
-# NEW PARTNERSHIP
 @login_required
 def new_partnership_page(request):
     if request.method == 'POST':
@@ -265,54 +264,55 @@ def partnership_detail(request, partnership_id):
     return render(request, 'scraper/partnerships_list.html', context)
 
 
-    #upload pdf
-def upload_pdf(request, partnership_id):
-
-    partnership = get_object_or_404(Partnership, id=partnership_id)
+# Bulk delete partnerships 
+def bulk_delete(request):
 
     if request.method == "POST":
 
-        files = request.FILES.getlist("files")
+        data = json.loads(request.body)
+        ids = data.get("ids", [])
 
+        Partnership.objects.filter(id__in=ids).delete()
+
+        return JsonResponse({"success": True})
+
+#upload pdf
+@csrf_exempt
+def upload_pdf(request, pk):
+    if request.method == "POST":
+        partnership = get_object_or_404(Partnership, pk=pk)
+        files = request.FILES.getlist("files")  # matches input name="files"
+
+        if not files:
+            return JsonResponse({"success": False, "error": "No files uploaded"})
+
+        saved = []
         for f in files:
-            PartnershipPDF.objects.create(
-                partnership=partnership,
-                file=f
-            )
+            pdf = PartnershipPDF.objects.create(partnership=partnership, file=f)
+            saved.append({
+                "id": pdf.id,
+                "url": pdf.file.url,
+                "name": pdf.filename()
+            })
+    return redirect("partnerships")
 
-        return redirect("upload_pdf", partnership_id=partnership.id)
 
-    pdfs = partnership.pdfs.all()
 
-    context = {
-        "partnership": partnership,
-        "pdfs": pdfs
-    }
-
-    return render(request, "partnership_pdfs.html", context)
-
-# view pdf
+# View PDF content (for iframe)
 def view_pdf(request, pdf_id):
-
     pdf = get_object_or_404(PartnershipPDF, id=pdf_id)
+    try:
+        return FileResponse(pdf.file.open('rb'), content_type='scraper/pdf', filename=pdf.filename())
+    except FileNotFoundError:
+        return JsonResponse({'success': False, 'error': 'PDF not found'})
 
-    return FileResponse(
-        pdf.file.open("rb"),
-        content_type="scraper/pdf"
-    )
-
-#delete pdf
+# Delete PDF (AJAX)
+@csrf_exempt
 def delete_pdf(request, pdf_id):
-
-    pdf = get_object_or_404(PartnershipPDF, id=pdf_id)
-
-    partnership_id = pdf.partnership.id
-
     if request.method == "POST":
-
-        if os.path.isfile(pdf.file.path):
+        pdf = get_object_or_404(PartnershipPDF, id=pdf_id)
+        # Delete file from storage
+        if pdf.file and os.path.isfile(pdf.file.path):
             os.remove(pdf.file.path)
-
         pdf.delete()
-
-    return redirect("upload_pdf", partnership_id=partnership_id)
+        return redirect("partnerships")

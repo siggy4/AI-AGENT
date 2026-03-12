@@ -43,7 +43,7 @@ urlpatterns = [
     path('manual/', views.manual_partnerships, name='manual_partnerships'),
     path('edit/<int:pk>/', views.edit_partnership, name='edit_partnership'),
     path("partnership/delete/<int:pk>/",views.delete_partnership,name="delete_partnership"),
-
+    path('partnerships/bulk-delete/', views.bulk_delete, name='bulk_delete_partnerships'),
 
 
     # PDF Management URLs

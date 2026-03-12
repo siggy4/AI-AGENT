@@ -15,7 +15,9 @@ class PartnershipForm(forms.ModelForm):
             'point_of_contact',
             'partnership_type',
             'start_date',
-            'status',
+            'email',
+            'phone',
+
 
 
         ]
