@@ -1,0 +1,40 @@
+{% extends "scraper/base.html" %}
+{% block title %}Delete Partnerships{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white rounded shadow">
+    <h1 class="text-2xl font-semibold mb-6">{{ title }}</h1>
+
+    {% if partnerships %}
+        <ul class="space-y-4">
+            {% for p in partnerships %}
+                <li class="border p-4 rounded flex justify-between items-center">
+
+                    <!-- Partnership info -->
+                    <div>
+                        <strong>{{ p.partner_name }}</strong> - {{ p.partnership_type }} - {{ p.country }}
+                        <br>
+                        Point of Contact: {{ p.point_of_contact }} | Status: {{ p.status }}
+                        {% if p.start_date %}- Start: {{ p.start_date }}{% endif %}
+                    </div>
+
+                    <!-- Delete button (POST form) -->
+                    <div>
+                        <form method="POST" action="{% url 'delete_selected_partnerships' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="selected_ids" value="{{ p.id }}">
+                            <button type="submit" class="text-red-600 hover:underline">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No partnerships found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
