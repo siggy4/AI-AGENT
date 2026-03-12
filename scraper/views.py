@@ -83,6 +83,18 @@ def opportunities_page(request):
     # Get user's interests
     user_interests = Interest.objects.filter(user=request.user).select_related('opportunity').order_by('-created_at')
     
+    # Calculate submission statistics
+    total_submissions = user_interests.count()
+    pending_submissions = user_interests.filter(status='interested').count()
+    submitted_submissions = user_interests.filter(status='applied').count()
+    failed_submissions = user_interests.filter(status='rejected').count()
+    
+    # Calculate response statistics (based on contact status)
+    total_responses = user_interests.filter(status__in=['contacted', 'applied', 'rejected']).count()
+    positive_responses = user_interests.filter(status='applied').count()  # Applied = positive response
+    negative_responses = user_interests.filter(status='rejected').count()  # Rejected = negative response
+    pending_responses = user_interests.filter(status='contacted').count()  # Contacted = pending response
+    
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
@@ -91,6 +103,14 @@ def opportunities_page(request):
         'countries': countries,
         'categories': categories,
         'user_interests': user_interests,
+        'total_submissions': total_submissions,
+        'pending_submissions': pending_submissions,
+        'submitted_submissions': submitted_submissions,
+        'failed_submissions': failed_submissions,
+        'total_responses': total_responses,
+        'positive_responses': positive_responses,
+        'negative_responses': negative_responses,
+        'pending_responses': pending_responses,
     })
 
 
