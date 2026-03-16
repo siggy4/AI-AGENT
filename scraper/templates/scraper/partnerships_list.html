@@ -55,11 +55,7 @@
             
         </div>
     </div>
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
 <!-- Add Partnership Modal -->
 <div id="addPartnershipModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
@@ -172,18 +168,18 @@
         </thead>
 
         <tbody>
-<<<<<<< HEAD
+
 
               <!--Delete Form-->
-            {% for p in partnerships %}
+
 <tr class="border-b border-gray-200 hover:bg-gray-50">
 
 
     <!-- Action buttons -->
     <td class="px-4 py-2 flex gap-2">
-=======
+
             {% for p in partnerships %}
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer" onclick="toggleDetails('{{ p.id }}')">
                 <td class="p-4" onclick="event.stopPropagation()">
                     <input type="checkbox" class="partnership-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500" value="{{ p.id }}" onchange="updateDeleteButton()">
@@ -343,9 +339,7 @@
                                 </div>
                             </div>
                         </div>
-<<<<<<< HEAD
-
-                       
+<         
     <!-- PDF LIST -->
     <div id="pdf-list-{{ p.id }}" class="space-y-2 mb-2">
 
@@ -421,8 +415,6 @@
                                        
                                      </div>   
 
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
         <!-- Upload Area (Right Side) -->
        
@@ -441,15 +433,14 @@
 </div>
                         
 
-<<<<<<< HEAD
+
                <div id="pdfModal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
     <div class="bg-white w-4/5 h-4/5 rounded shadow relative">
         <button onclick="closePDF()" class="absolute top-2 right-3 text-xl">✕</button>
         <iframe id="pdfFrame" class="w-full h-full"></iframe>
     </div>
 </div>
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
                         <!-- Save Button -->
                         <div class="mt-4 flex justify-end gap-2">
                             <button onclick="saveDetails('{{ p.id }}')" 
@@ -459,18 +450,17 @@
                         </div>
                     </div>
                 </td>
-<<<<<<< HEAD
+
             </tr> 
             {% empty %}
-=======
-            </tr> {% empty %}
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
+ {% endfor %}
             <tr>
                 <td colspan="7" class="p-6 text-center text-gray-500">
                     No records found.
                 </td>
             </tr>
-            {% endfor %}
+          
         
         </tbody>
     </table>
@@ -545,7 +535,7 @@ function saveDetails(partnershipId) {
     alert('Details saved successfully!');
 }
 
-<<<<<<< HEAD
+
 
 
 function uploadFiles(files, id){
@@ -624,8 +614,7 @@ function openPDF(url){
 function closePDF(){
     document.getElementById("pdfModal").classList.add("hidden");
 }
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
 // File upload functions
 function handleDragOver(event) {
     event.preventDefault();
@@ -845,10 +834,6 @@ selectAll.addEventListener("change", function(){
 }
 </script>
 
-<<<<<<< HEAD
-{% endblock %}
-=======
-<script src="{% static 'js/script.js' %}"></script>
 
 {% endblock %}
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+

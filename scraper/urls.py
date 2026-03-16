@@ -2,14 +2,10 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
-from .views import opportunities_page, run_scraper_api, home, dashboard_page, new_partnership_page, about_page, \
-<<<<<<< HEAD
-    partnerships_list, opportunities_list, new_opportunities, update_partnership, update_partnership_details, delete_partnership
+from .views import opportunities_page, run_scraper_api, home, dashboard_page, new_partnership_page,partnerships_list, opportunities_list, new_opportunities, update_partnership, delete_partnership, about_page 
 from .views import create_partnership_api
-from .views import manual_partnerships, edit_partnership
-=======
-    partnerships_list, opportunities_list, new_opportunities, add_interest, remove_interest, update_interest
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+from .views import  edit_partnership,partnerships_list, opportunities_list, new_opportunities, add_interest, remove_interest, update_interest
+
 
 from scraper import views
 from scraper.views import OpportunityViewSet
@@ -28,11 +24,7 @@ urlpatterns = [
     path('new/', new_partnership_page, name='new_partnership'),
     path('list/', partnerships_list, name='partnerships'),
     path('update_partnership/<int:pk>/', views.update_partnership, name='update_partnership'),
-<<<<<<< HEAD
-    path('update-partnership-details/<int:pk>/', views.update_partnership_details, name='update_partnership_details'),
-  
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
 
     # opportunity detail view
     path('opportunities/', opportunities_page, name='opportunities_page'),
@@ -48,10 +40,8 @@ urlpatterns = [
     path('about/', about_page, name='about'),
     path('login/', auth_views.LoginView.as_view(template_name='scraper/home.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
-<<<<<<< HEAD
 
     # Partnership
-    path('manual/', views.manual_partnerships, name='manual_partnerships'),
     path('edit/<int:pk>/', views.edit_partnership, name='edit_partnership'),
     path("partnership/delete/<int:pk>/",views.delete_partnership,name="delete_partnership"),
     path('partnerships/bulk-delete/', views.bulk_delete, name='bulk_delete_partnerships'),
@@ -64,6 +54,4 @@ urlpatterns = [
 
 
     ]
-=======
-]
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+

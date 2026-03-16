@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 Django~=4.1.7
 pip~=21.2.4
 djangorestframework~=3.14.0
@@ -13,8 +10,5 @@ pycountry
 python-dotenv
 firecrawl-py
 pydantic
-<<<<<<< HEAD
-
-=======
 django-countries
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+

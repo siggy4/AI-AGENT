@@ -41,7 +41,7 @@ class Interest(models.Model):
 
 
 class Partnership(models.Model):
-<<<<<<< HEAD
+
     PARTNERSHIP_TYPE_CHOICES = [
         ('Strategic', 'Strategic'),
         ('Referral', 'Referral'),
@@ -98,7 +98,13 @@ class Partnership(models.Model):
     phone = models.CharField(max_length=50, null=True, blank=True)
     method = models.CharField(max_length=50, null=True, blank=True)
     notes = models.TextField(blank=True, default='')
-
+    source = models.CharField(max_length=20, choices=[
+        ('inbound', 'Inbound'),
+        ('outbound', 'Outbound'),
+        ('events', 'Events'),
+        ('institutional', 'Institutional'),
+        ('internal', 'Internal'),
+    ],blank=True, null=True)
 
 
 class PartnershipPDF(models.Model):
@@ -118,7 +124,7 @@ class PartnershipPDF(models.Model):
     # source = models.CharField(max_length=200, blank=True, null=True)
     # office_location = models.CharField(max_length=200, blank=True, null=True)
     # comment = models.TextField(blank=True, null=True)
-=======
+
     country = models.CharField(max_length=100)
     company = models.CharField(max_length=255)
     email = models.EmailField()
@@ -130,4 +136,4 @@ class PartnershipPDF(models.Model):
 
     def __str__(self):
         return f"{self.company} - {self.country}"
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+

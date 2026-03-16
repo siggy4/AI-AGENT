@@ -13,13 +13,10 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-<<<<<<< HEAD
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 # This tells Python to find your text file and read the secrets inside
 load_dotenv()
 
@@ -29,10 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Now load the key into a variable Django can use
 FIRECRAWL_API_KEY = os.getenv("fc-0d3f0027ab614353a6256aefc731844a")
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
 
 # Quick-start development settings - unsuitable for production
@@ -101,12 +94,11 @@ DATABASES = {
     }
 }
 
-<<<<<<< HEAD
+
 # saving media files (pdfs)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

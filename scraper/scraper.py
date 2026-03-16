@@ -2,14 +2,14 @@ import os
 from firecrawl import FirecrawlApp
 from pydantic import BaseModel
 from typing import List
-from .models import Opportunity
+from .models import Opportunity, Interest, Partnership
 
 firecrawl = FirecrawlApp(api_key="fc-0d3f0027ab614353a6256aefc731844a")
 
 
 # 1. Define the structure you want Firecrawl to find
 class TenderSchema(BaseModel):
-    source_name: str
+    source: str
     title: str
     url: str
     category: str = ""
@@ -24,11 +24,11 @@ class TenderList(BaseModel):
     tenders: List[TenderSchema]
 
 
-<<<<<<< HEAD
+
 def run_scraper():
-=======
+ pass
 def run_firecrawl_scraper():
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
     target_url = "https://tenders.go.ke/tenders"
 
     # 2. Tell Firecrawl to scrape and extract based on your schema

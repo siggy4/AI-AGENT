@@ -1,6 +1,6 @@
 import django.contrib.gis.geoip2.resources
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
+
 from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -22,7 +22,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 from django.views.decorators.http import require_POST
-=======
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
@@ -34,7 +34,6 @@ from django.contrib.auth.decorators import login_required
 from scraper.serializer import OpportunitySerializer
 import pycountry
 from rest_framework import viewsets
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
 
 # API VIEWSET
 class OpportunityViewSet(viewsets.ModelViewSet):
@@ -65,7 +64,7 @@ def dashboard_page(request):
 def opportunities_page(request):
     total = Opportunity.objects.count()
     analyzed = Opportunity.objects.filter(analyzed=True).count()
-<<<<<<< HEAD
+
     latest = Opportunity.objects.order_by('-scraped_at')[:10]
 
     opportunities = Opportunity.objects.all().order_by('-id')
@@ -73,7 +72,7 @@ def opportunities_page(request):
     opportunities = Opportunity.objects.all().order_by('-id')
     countries = [(country.name) for country in pycountry.countries]
 
-=======
+
     countries = [(country.name) for country in pycountry.countries]
     
     # Define categories
@@ -128,17 +127,15 @@ def opportunities_page(request):
     negative_responses = user_interests.filter(status='rejected').count()  # Rejected = negative response
     pending_responses = user_interests.filter(status='contacted').count()  # Contacted = pending response
     
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
     return render(request, 'scraper/opportunities.html', {
         'total_opportunities': total,
         'total_analyzed': analyzed,
         'latest': latest,
-<<<<<<< HEAD
+
 
         'opportunities': opportunities,
         'countries': countries,
-
-=======
         'opportunities': opportunities,
         'countries': countries,
         'categories': categories,
@@ -151,7 +148,7 @@ def opportunities_page(request):
         'positive_responses': positive_responses,
         'negative_responses': negative_responses,
         'pending_responses': pending_responses,
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
     })
 
 
@@ -205,10 +202,7 @@ def new_partnership_page(request):
         Partnership.objects.create(
             country=request.POST.get('country'),
             company=request.POST.get('company'),
-<<<<<<< HEAD
-=======
             source=request.POST.get('source'),
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
             email=request.POST.get('email'),
             phone=request.POST.get('phone'),
             reached=request.POST.get('reached'),
@@ -236,7 +230,7 @@ def home(request):
     return render(request, 'scraper/home.html')
 
 
-<<<<<<< HEAD
+
 #new partnership pGE
 def create_partnership_api(request):
     if request.method == "POST":
@@ -258,7 +252,7 @@ def edit_partnership(request, pk):
         form.save()
         return redirect('manual_partnerships')
     return render(request, "scraper/edit_partnership.html", {"form": form})
-=======
+
 # Interest Management Views
 @require_POST
 @login_required
@@ -286,7 +280,7 @@ def remove_interest(request, interest_id):
     interest.delete()
     
     return JsonResponse({'success': True})
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
 
 
 @require_POST
@@ -338,7 +332,6 @@ def partnerships_list(request):
         "partnerships": partnerships,
         "title": title,
         "countries": countries,
-<<<<<<< HEAD
     })
 
 #delete partnerships
@@ -349,12 +342,9 @@ def delete_partnership(request, pk):
 
     if request.method == "POST":
         partnership.delete()
-=======
-        "total_partnerships": total_partnerships,
-        "total_partnerships_contacted": total_partnerships_contacted,
-        "not_contacted": not_contacted,
-    })
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+        #"total_partnerships": total_partnerships,
+        #"total_partnerships_contacted": total_partnerships_contacted,
+        #"not_contacted": not_contacted,
 
     return redirect("partnerships")
 
@@ -372,7 +362,6 @@ def update_partnership(request, pk):
     return render(request, "scraper/update_partnership.html", {
         "p": partnership
     })
-<<<<<<< HEAD
 
 #partnership detail 
 def partnership_detail(request, partnership_id):
@@ -437,5 +426,4 @@ def delete_pdf(request, pdf_id):
             os.remove(pdf.file.path)
         pdf.delete()
         return redirect("partnerships")
-=======
->>>>>>> 1462b7821e188e5fc1723630f12cf9b406f5a5bc
+
