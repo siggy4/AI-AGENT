@@ -15,8 +15,116 @@ class Opportunity(models.Model):
     scraped_at = models.DateTimeField(auto_now_add=True)
     analyzed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.title
+
+
+class Interest(models.Model):
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name='interests')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    notes = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[
+        ('interested', 'Interested'),
+        ('contacted', 'Contacted'),
+        ('applied', 'Applied'),
+        ('rejected', 'Rejected'),
+        ('withdrawn', 'Withdrawn'),
+    ], default='interested')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['opportunity', 'user']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.opportunity.title[:50]}"
+
 
 class Partnership(models.Model):
+
+    PARTNERSHIP_TYPE_CHOICES = [
+        ('Strategic', 'Strategic'),
+        ('Referral', 'Referral'),
+        ('Integration', 'Integration'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+    ]
+    
+    REACHED_CHOICES = [
+        ('Not Contacted', 'Not Contacted'),
+        ('Reached', 'Reached'),
+    ]
+
+    reached = models.CharField(
+        max_length=20,
+        choices=REACHED_CHOICES,
+        default='Not Contacted'
+    )
+    
+    partnership_type = models.CharField(
+        max_length=50,
+        choices=PARTNERSHIP_TYPE_CHOICES,
+        null=True,
+        blank=True
+    )
+    
+    # NEW: Meeting Type (Physical or Virtual)
+    meeting_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('Physical', 'Physical'),
+            ('Virtual', 'Virtual')
+        ],
+        blank=True,
+        null=True
+    )
+    
+    partner_name = models.CharField(max_length=255, null=True, blank=True)
+    point_of_contact = models.CharField(max_length=255, null=True, blank=True) # or EmailField
+    start_date = models.DateField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    is_manual = models.BooleanField(default=True)  # Flag for manual entry
+    country = models.CharField(max_length=50, blank=True, null=True)
+    #country = CountryField(blank=True)
+    company = models.CharField(max_length=255)
+    meeting_date = models.DateField(blank=True, null=True)
+    followup_date = models.DateField(blank=True, null=True)
+    comment = models.TextField(blank=True, default='')
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=50, null=True, blank=True)
+    method = models.CharField(max_length=50, null=True, blank=True)
+    notes = models.TextField(blank=True, default='')
+    source = models.CharField(max_length=20, choices=[
+        ('inbound', 'Inbound'),
+        ('outbound', 'Outbound'),
+        ('events', 'Events'),
+        ('institutional', 'Institutional'),
+        ('internal', 'Internal'),
+    ],blank=True, null=True)
+
+
+class PartnershipPDF(models.Model):
+    partnership = models.ForeignKey(Partnership,on_delete=models.CASCADE,related_name="pdfs")
+    file = models.FileField(upload_to="partnership_pdfs/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def filename(self):
+        return self.file.name.split("/")[-1]
+
+    def __str__(self):
+        return self.filename()
+
+
+
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # source = models.CharField(max_length=200, blank=True, null=True)
+    # office_location = models.CharField(max_length=200, blank=True, null=True)
+    # comment = models.TextField(blank=True, null=True)
+
     country = models.CharField(max_length=100)
     company = models.CharField(max_length=255)
     email = models.EmailField()
@@ -29,8 +137,3 @@ class Partnership(models.Model):
     def __str__(self):
         return f"{self.company} - {self.country}"
 
-    def __str__(self):
-        return f"{self.company} - {self.country}"
-
-    def __str__(self):
-        return self.title

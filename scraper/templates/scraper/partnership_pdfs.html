@@ -1,0 +1,55 @@
+{% extends "scraper/base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload PDF</title>
+</head>
+<body>
+
+<h2>Upload PDFs for {{ partnership.partner_name }}</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <input type="file" name="files" multiple required>
+
+    <button type="submit">Upload</button>
+
+</form>
+
+<hr>
+
+<h3>Uploaded PDFs</h3>
+
+<ul>
+
+{% for pdf in pdfs %}
+
+<li>
+
+    {{ pdf.filename }}
+
+    <a href="{% url 'view_pdf' pdf.id %}" target="_blank">
+        View
+    </a>
+
+    <form method="POST" action="{% url 'delete_pdf' pdf.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
+
+</li>
+
+{% empty %}
+
+<p>No PDFs uploaded yet.</p>
+
+{% endfor %}
+
+</ul>
+
+</body>
+</html>
