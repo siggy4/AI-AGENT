@@ -1,4 +1,4 @@
-import django.contrib.gis.geoip2.resources
+
 from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse, FileResponse
@@ -34,6 +34,13 @@ from django.contrib.auth.decorators import login_required
 from scraper.serializer import OpportunitySerializer
 import pycountry
 from rest_framework import viewsets
+from django.utils import timezone
+from django.contrib.gis.geoip2 import GeoIP2
+from ckeditor.fields import RichTextField
+
+
+
+
 
 # API VIEWSET
 class OpportunityViewSet(viewsets.ModelViewSet):
@@ -427,3 +434,8 @@ def delete_pdf(request, pdf_id):
         pdf.delete()
         return redirect("partnerships")
 
+
+def mark_submitted(self):
+    self.submission_status = True
+    self.submitted_at = timezone.now()
+    self.save()

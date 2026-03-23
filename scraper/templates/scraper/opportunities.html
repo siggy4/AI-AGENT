@@ -273,6 +273,8 @@
                         add opportunity
                     </div>
                 </button>
+
+
             </div>
 
             <!-- Tab Content -->
@@ -764,7 +766,127 @@
                
             </div>
         </div>
+
+        <!--workplan status form -->   
+          <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <button class="tab-header active px-6 py-3 text-sm font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50" 
+                       
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                         Workplan Status
+                    </div>
+                    
+                </button>
+<form method="post">
+    {% csrf_token %}
+
+    <select name="workplan_status">
+        <option value="not_started">Not Started</option>
+        <option value="drafting">Drafting</option>
+        <option value="review">Under Review</option>
+        <option value="finalized">Finalized</option>
+    </select>
+
+    <textarea name="workplan_notes">
+        {{ opportunity.notes }}
+    </textarea>
+
+    <button type="submit">Update</button>
+</form>
     </div>
+
+
+<!--CV Repository-->
+
+          <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <div class="flex items-center gap-2">
+    <h1>CV Repository</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="role" placeholder="Role">
+    <input type="file" name="file">
+    <button type="submit">Upload CV</button>
+</form>
+
+<ul>
+{% for cv in opportunity.cvs.all %}
+    <li>
+        {{ cv.name }} - {{ cv.role }}
+        <a href="{{ cv.file.url }}">View</a>
+    </li>
+{% endfor %}
+</ul>
+</div>
+    </div>
+    </div>
+</div>
+
+<!-- Past Performance Repository-->
+
+          <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <div class="flex items-center gap-2">
+<h3>ASC Past Performance</h3>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Document Title">
+    <input type="file" name="document">
+    <button type="submit">Upload PDF</button>
+</form>
+
+<ul>
+{% for doc in opportunity.past_performance.all %}
+    <li>
+        {{ doc.title }}
+        <a href="{{ doc.document.url }}">View</a>
+    </li>
+{% endfor %}
+</ul>
+</div>
+    </div>
+        </div>
+
+<!-- Proposal Drafts Repository-->
+
+          <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <div class="flex items-center gap-2">
+<h3>Proposal Drafts</h3>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <button type="submit">Upload New Version</button>
+</form>
+
+<ul>
+{% for draft in opportunity.drafts.all %}
+    <li>
+        Version {{ draft.version }} -
+        <a href="{{ draft.file.url }}">View</a>
+    </li>
+{% endfor %}
+</ul>
+
 <script>
 function switchTab(tabName, element) {
     // Remove active class from all tabs

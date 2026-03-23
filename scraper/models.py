@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -14,9 +16,26 @@ class Opportunity(models.Model):
     posted_date = models.DateField(blank=True, null=True)
     scraped_at = models.DateTimeField(auto_now_add=True)
     analyzed = models.BooleanField(default=False)
+    workplan_status = models.CharField(
+        max_length=50,
+        choices=[
+            ('not_started', 'Not Started'),
+            ('drafting', 'Drafting'),
+            ('review', 'Under Review'),
+            ('finalized', 'Finalized')
+        ],
+        default='not_started'
+    )
+
+    submission_status = models.BooleanField(default=False)
+    submitted_at = models.DateTimeField(null=True, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    notes = RichTextField(blank=True)
 
     def __str__(self):
         return self.title
+
 
 
 class Interest(models.Model):
@@ -119,12 +138,6 @@ class PartnershipPDF(models.Model):
         return self.filename()
 
 
-
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # source = models.CharField(max_length=200, blank=True, null=True)
-    # office_location = models.CharField(max_length=200, blank=True, null=True)
-    # comment = models.TextField(blank=True, null=True)
-
     country = models.CharField(max_length=100)
     company = models.CharField(max_length=255)
     email = models.EmailField()
@@ -137,3 +150,92 @@ class PartnershipPDF(models.Model):
     def __str__(self):
         return f"{self.company} - {self.country}"
 
+
+
+class CV(models.Model):
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name="cvs")
+
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
+
+    file = models.FileField(upload_to='cvs/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+    
+
+class PastPerformance(models.Model):
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name="past_performance")
+
+    title = models.CharField(max_length=255)
+
+    document = models.FileField(upload_to='past_performance/')
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+
+class ProposalDraft(models.Model):
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name="drafts")
+
+    version = models.IntegerField()
+
+    file = models.FileField(upload_to='proposal_drafts/')
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-version']      
+
+def save(self, *args, **kwargs):
+    if not self.version:
+        last = ProposalDraft.objects.filter(
+            opportunity=self.opportunity
+        ).order_by('-version').first()
+
+        self.version = 1 if not last else last.version + 1
+
+    super().save(*args, **kwargs)
+
+
+
+class SupportingDocument(models.Model):
+
+    CATEGORY_CHOICES = [
+        ('budget', 'Budget'),
+        ('legal', 'Legal'),
+        ('technical', 'Technical'),
+        ('financial', 'Financial'),
+        ('other', 'Other'),
+    ]
+
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name="support_docs")
+
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+
+    title = models.CharField(max_length=255)
+
+    document = models.FileField(upload_to='supporting_docs/')
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)   
+
+
+class SubmissionAudit(models.Model):
+
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name="audit")
+
+    status = models.CharField(max_length=100)
+
+    notes = models.TextField(blank=True)
+
+    source_url = models.URLField(blank=True)
+
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    user = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.opportunity.title} - {self.status}"
