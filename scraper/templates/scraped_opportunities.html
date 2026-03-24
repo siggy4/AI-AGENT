@@ -1,0 +1,16 @@
+<h2>Tenders</h2>
+
+<ul>
+{% for opp in opportunities %}
+    <li>
+        <strong>{{ opp.title }}</strong><br>
+
+        Organization: {{ opp.organization }}<br>
+        Deadline: {{ opp.deadline }}<br>
+
+        <p>{{ opp.description|truncatewords:20 }}</p>
+
+        <a href="{{ opp.source_url }}" target="_blank">View</a>
+    </li>
+{% endfor %}
+</ul>

@@ -172,6 +172,13 @@ def opportunities_list(request):
         'title': title,
     })
 
+def opportunity_list(request):
+    opportunities = Opportunity.objects.all().order_by('-created_at')
+
+    return render(request, 'opportunities/list.html', {
+        'opportunities': opportunities
+    })
+
 def new_opportunities(request):
     if request.method =='POST':
         #process form and save the data to the database

@@ -29,10 +29,11 @@ class Opportunity(models.Model):
 
     submission_status = models.BooleanField(default=False)
     submitted_at = models.DateTimeField(null=True, blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     notes = RichTextField(blank=True)
-
+    deadline = models.CharField(max_length=100, blank=True, null=True)
+    organization = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     def __str__(self):
         return self.title
 

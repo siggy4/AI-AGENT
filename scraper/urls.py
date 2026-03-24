@@ -30,7 +30,9 @@ urlpatterns = [
     path('opportunities/', opportunities_page, name='opportunities_page'),
     path('opportunity_list/', opportunities_list, name='opportunities'),
     path('new_opportunities/', new_opportunities, name='new_opportunities'),
-    path('scap_opportunities/', run_scraper_api, name='scrap_opportunities'),
+    path('scrap_opportunities/', run_scraper_api, name='scrap_opportunities'),
+    path('', views.opportunity_list, name='opportunity_list'),
+
     
     # interest management
     path('add-interest/<int:opportunity_id>/', add_interest, name='add_interest'),
@@ -53,5 +55,5 @@ urlpatterns = [
     path("delete-pdf/<int:pdf_id>/",views.delete_pdf,name="delete_pdf"),
 
 
-    ]
+]
 

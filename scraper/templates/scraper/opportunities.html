@@ -775,7 +775,7 @@
             <div class="flex border-b border-gray-200">
                 <button class="tab-header active px-6 py-3 text-sm font-medium text-blue-600 border-b-2 border-blue-600 bg-blue-50" 
                        
-                    <div class="flex items-center gap-2">
+                        onclick="switchTab('workplan-status', this)">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
@@ -886,6 +886,60 @@
     </li>
 {% endfor %}
 </ul>
+</div>
+    </div>
+        </div>
+
+
+<!-- Supporting Documents Repository-->
+        <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <div class="flex items-center gap-2">
+<h3>Supporting Documents</h3>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <select name="category">
+        <option value="budget">Budget</option>
+        <option value="legal">Legal</option>
+        <option value="technical">Technical</option>
+        <option value="financial">Financial</option>
+        <option value="other">Other</option>
+    </select>
+
+    <input type="text" name="title">
+    <input type="file" name="document">
+
+    <button type="submit">Upload</button>
+</form>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+<!-- Notes Section -->
+        <div class="flex-1">
+        <!-- Modern Tabs -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+            <!-- Tab Headers -->
+            <div class="flex border-b border-gray-200">
+                <div class="flex items-center gap-2">
+      <h3>Notes</h3>
+
+<form method="post">
+    {% csrf_token %}
+    <textarea name="notes">{{ opportunity.notes }}</textarea>
+    <button type="submit">Save Notes</button>
+</form>  
+                </div>
+            </div>
+        </div>
+        </div>
 
 <script>
 function switchTab(tabName, element) {
