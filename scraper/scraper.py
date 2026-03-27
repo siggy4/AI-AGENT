@@ -1,8 +1,14 @@
 import os
+from unittest import result
 from firecrawl import FirecrawlApp
+from firecrawl.types import ScrapeOptions
 from pydantic import BaseModel
 from typing import List
 from .models import Opportunity, Interest, Partnership
+from .models import Tender
+from datetime import datetime
+
+
 
 firecrawl = FirecrawlApp(api_key="fc-0d3f0027ab614353a6256aefc731844a")
 
@@ -25,40 +31,64 @@ class TenderList(BaseModel):
 
 
 
-def run_scraper():
- pass
 def run_firecrawl_scraper():
-
     target_url = "https://tenders.go.ke/tenders"
 
-    # 2. Tell Firecrawl to scrape and extract based on your schema
-    # This replaces all the BeautifulSoup 'find' and 'select' logic
-    result = firecrawl.scrape_url(
-        url=target_url,
-        params={
-            "formats": ["json"],
-            "jsonOptions": {
-                "schema": TenderList.model_json_schema()
-            }
-        }
+    scrape_opts = ScrapeOptions(
+        only_main_content=False,
+        max_age=600000,
+        parsers=["pdf"],
+        formats=["markdown"]
     )
 
-    scraped_count = 0
+    try:
+        # Perform the crawl
+        result = firecrawl.crawl(
+            url=target_url,
+            limit=1,
+            scrape_options=scrape_opts,
+        )
 
-    # 3. Save to your Django Database
-    if "json" in result:
-        for item in result["json"]["tenders"]:
-            # Standard Django duplicate check
-            if not Opportunity.objects.filter(url=item['url']).exists():
-                Opportunity.objects.create(
-                    source_name="PPIP Kenya",
-                    title=item['title'],
-                    url=item['url'],
-                    category=item['category']
-                )
-                scraped_count += 1
+        # Transform raw result into structured data
+        # Example: list of dicts with title, link, deadline, org
+        items = []
+        for r in result:  # adjust according to your Firecrawl output
+            items.append({
+                "title": r.get("title", ""),
+                "link": r.get("link", ""),
+                "deadline": r.get("deadline", None),
+                "organization": r.get("organization", "")
+            })
 
-    return {"status": "success", "new_items": scraped_count}
+        return {"status": "success", "items": items}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+  
+    
+
+
+
+def save_tenders_to_db(items):
+    for item in items:
+        # Convert deadline to date object if needed
+        deadline = None
+        if item.get("deadline"):
+            try:
+                deadline = datetime.strptime(item["deadline"], "%Y-%m-%d").date()
+            except:
+                pass
+
+        # Save or update based on unique link
+        Tender.objects.update_or_create(
+            link=item["link"],
+            defaults={
+                "title": item.get("title", ""),
+                "deadline": deadline,
+                "organization": item.get("organization", ""),
+            }
+        )
 
 
 def run_scraper():

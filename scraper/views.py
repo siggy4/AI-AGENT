@@ -38,7 +38,8 @@ from django.utils import timezone
 from django.contrib.gis.geoip2 import GeoIP2
 from ckeditor.fields import RichTextField
 
-
+from django.http import JsonResponse
+from .scraper import save_tenders_to_db
 
 
 
@@ -201,12 +202,21 @@ def new_opportunities(request):
         'countries': countries,
     })
 
-# RUN SCRAPER API
-def run_scraper_api(request):
-    if request.method == 'GET':
-        return JsonResponse(run_scraper())
-    return JsonResponse({'error': 'Only GET allowed'}, status=405)
 
+def run_scraper_api(request):
+    if request.method == "GET":
+        # Step 1: Run scraper
+        data = run_scraper()
+
+        # Step 2: If successful, save to DB
+        if data.get("status") == "success":
+            save_tenders_to_db(data.get("items", []))
+            return JsonResponse({"status": "success", "message": "Tenders scraped and saved to DB"})
+
+        # If scraper failed
+        return JsonResponse({"status": "error", "message": data.get("message")}, status=500)
+
+    return JsonResponse({"error": "Only GET allowed"}, status=405)
 
 # NEW PARTNERSHIP
 @login_required

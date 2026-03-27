@@ -240,3 +240,14 @@ class SubmissionAudit(models.Model):
 
     def __str__(self):
         return f"{self.opportunity.title} - {self.status}"
+    
+
+class Tender(models.Model):
+    title = models.CharField(max_length=500)
+    link = models.URLField()
+    deadline = models.DateField(null=True, blank=True)
+    organization = models.CharField(max_length=200, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

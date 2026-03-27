@@ -7,4 +7,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         save_undp_tender()
-        self.stdout.write(self.style.SUCCESS("UNDP tender scraped"))
+        print("✅ UNDP tender scraped")
