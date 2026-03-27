@@ -1,0 +1,10 @@
+
+.tab-content.hidden {
+    display: none;
+}
+.tab-content.block {
+    display: block;
+}
+.tab.active {
+    border-b-2 border-blue-600 text-blue-600 font-semibold;
+}

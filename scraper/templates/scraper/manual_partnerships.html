@@ -1,0 +1,31 @@
+<!-- scraper/templates/scraper/manual_partnerships.html -->
+<h2>Manually Added Partnerships</h2>
+<table class="table-auto border-collapse border border-gray-300 w-full">
+    <thead>
+        <tr>
+            <th class="border px-2 py-1">Partner Name</th>
+            <th class="border px-2 py-1">Contact</th>
+            <th class="border px-2 py-1">Type</th>
+            <th class="border px-2 py-1">Start Date</th>
+            <th class="border px-2 py-1">Status</th>
+            <th class="border px-2 py-1">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in partnerships %}
+        <tr>
+            <td class="border px-2 py-1">{{ p.partner_name }}</td>
+            <td class="border px-2 py-1">{{ p.point_of_contact }}</td>
+            <td class="border px-2 py-1">{{ p.partnership_type }}</td>
+            <td class="border px-2 py-1">{{ p.start_date }}</td>
+            <td class="border px-2 py-1">{{ p.status }}</td>
+            <td class="border px-2 py-1">
+                <a href="{% url 'edit_partnership' p.id %}" class="text-blue-600">Edit</a> |
+                <a href="{% url 'delete_partnership' p.id %}" class="text-red-600">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">No manual partnerships yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
